@@ -27,9 +27,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/postlogin', [LoginController::class, 'postLogin']);
 Route::get('/logout', [LoginController::class, 'logout']);
-Route::get('/cek_loundry', [Home::class, 'cekStatusLoundry']);
-Route::get('/cek_loundry/{id_loundry}', [Home::class, 'cekStatusLoundry']);
-Route::get('/', [Home::class, 'cekStatusLoundry']);
+Route::get('/', [Home::class, 'home']);
 
 
 Route::get('/tentang_aplikasi', [Home::class, 'tentangAplikasi']);
@@ -61,6 +59,7 @@ Route::group(['middleware' => ['auth', 'ceklevel:Administrator']], function () {
         // GET REQUEST
         Route::get('/pengguna', [Admin::class, 'pengguna']);
         Route::get('/fetch_data', [Admin::class, 'fetchData']);
+        Route::get('/fetch_data_pembelian', [Admin::class, 'fetchDataPembelian']);
 
         // CRUD PENGGUNA
         Route::post('/create_pengguna', [Admin::class, 'createPengguna']);

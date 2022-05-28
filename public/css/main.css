@@ -195,6 +195,10 @@ ul.timeline>li:before {
     width: 100%;
 }
 
+.no-hover {
+    background-color: transparent !important;
+}
+
 .no-hover:hover {
     background-color: transparent !important;
 }

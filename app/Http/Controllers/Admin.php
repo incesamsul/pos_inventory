@@ -94,6 +94,22 @@ class Admin extends Controller
         }
     }
 
+    // fetch data pembelian
+    function fetchDataPembelian(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = $request->get('query');
+            $query = str_replace(" ", "%", $query);
+
+            $data['pembelian'] = DB::table('barang')
+                ->Where('nama_barang', 'like', '%' . $query . '%')
+                ->orWhere('barcode', 'like', '%' . $query . '%')
+                ->paginate(10);
+
+            return view('pages.pembelian.data_pembelian', $data)->render();
+        }
+    }
+
 
     // CRUD SATUAN
 
