@@ -181,6 +181,10 @@ ul.timeline>li:before {
     cursor: pointer !important;
 }
 
+.cursor-pointer {
+    cursor: pointer !important;
+}
+
 #loading {
     display: none;
     z-index: -2;

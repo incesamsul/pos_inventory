@@ -24,6 +24,7 @@
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{asset('/css/main.css')}}">
     <link rel="stylesheet" href="{{asset('/css/multistep.css')}}">
+    <link rel="stylesheet" href="{{asset('/css/autocomplete.css')}}">
     <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{asset('stisla')}}/assets/css/style.css">
     <link rel="stylesheet" href="{{asset('stisla')}}/assets/css/components.css">

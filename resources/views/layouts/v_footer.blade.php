@@ -53,6 +53,7 @@
 @endif
 
 <script src="{{ asset('js/multistep.js') }}"></script>
+<script src="{{ asset('js/autocomplete.js') }}"></script>
 
 {{-- Datatable js --}}
 

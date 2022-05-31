@@ -63,6 +63,49 @@ class Admin extends Controller
     }
 
 
+    public function searchBarang(Request $request)
+    {
+        $barang = Barang::where('nama_barang', 'LIKE', '%' . $request->keyword . '%')->get();
+        return response()->json($barang);
+    }
+
+    public function getAllBarang()
+    {
+        $barang = Barang::all();
+        return response()->json($barang);
+    }
+
+    public function savePenyesuaianBarang(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $stokPenyesuaian = $request->stok_penyesuaian;
+            $kodeBarang = $request->kode_barang;
+
+            $dataPenyesuaian = [];
+            for ($count = 0; $count < count($kodeBarang); $count++) {
+
+                $data = [
+                    'stok_penyesuaian' => $stokPenyesuaian[$count + 1],
+                    'kode_barang' => $kodeBarang[$count]
+                ];
+                $dataPenyesuaian[] = $data;
+            }
+            foreach ($dataPenyesuaian as $row) {
+                $kodeBarang = explode(",", $row['kode_barang'])[0];
+                $stokAkhir = explode(",", $row['kode_barang'])[1];
+                $stokPenyesuaian = $row['stok_penyesuaian'];
+                Barang::where([
+                    ['kode_barang', '=', $kodeBarang]
+                ])->update([
+                    'stok_akhir' => ($stokAkhir + $stokPenyesuaian)
+                ]);
+            }
+
+            return 1;
+        }
+    }
+
 
 
     // fetch data user by admin

@@ -57,9 +57,15 @@ Route::group(['middleware' => ['auth', 'ceklevel:user']], function () {
 Route::group(['middleware' => ['auth', 'ceklevel:Administrator']], function () {
     Route::group(['prefix' => 'admin'], function () {
         // GET REQUEST
+
         Route::get('/pengguna', [Admin::class, 'pengguna']);
         Route::get('/fetch_data', [Admin::class, 'fetchData']);
         Route::get('/fetch_data_pembelian', [Admin::class, 'fetchDataPembelian']);
+
+        Route::post('/search_barang', [Admin::class, 'searchBarang']);
+        Route::post('/get_all_barang', [Admin::class, 'getAllBarang']);
+        Route::post('/save_penyesuaian_barang', [Admin::class, 'savePenyesuaianBarang']);
+
 
         // CRUD PENGGUNA
         Route::post('/create_pengguna', [Admin::class, 'createPengguna']);

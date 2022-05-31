@@ -4,244 +4,146 @@
 <section class="section">
     <div class="row">
         <div class="col-lg-12">
+            <form id="formPenyesuaian">
             <div class="card">
                 <div class="card-header d-flex  justify-content-between">
                     <h4>Penyesuaian Stok</h4>
                     <div class="table-tools d-flex justify-content-around ">
                         <input type="text" class="form-control card-form-header mr-3"
                             placeholder="Cari Data Pengguna ..." id="searchbox">
-                        <button type="button" class="btn btn-primary float-right" data-toggle="modal" id="addUserBtn"
+                        <button type="button" class="btn btn-primary add-record float-right" data-toggle="modal" id="addUserBtn"
                             data-target="#modalLayanan"><i class="fas fa-plus"></i></button>
                     </div>
                 </div>
                 <div class="card-body ">
-                    <table class="table table-striped table-hover table-user table-action-hover" id="table-data">
-                        <thead>
-                            <tr>
-                                <td>Kode barang</td>
-                                <td>Nama barang</td>
-                                <td>barcode</td>
-                                <td>Kode satuan </td>
-                                <td>Stok minimal </td>
-                                <td>Modal </td>
-                                <td>Harga jual </td>
-                                <td>Stok akhir </td>
-                                <td>Hpp </td>
-                                <td></td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($pembelian as $row)
-                            <tr>
-                                <td>{{ $row->kode_barang }}</td>
-                                <td>{{ $row->nama_barang }}</td>
-                                <td>{{ $row->barcode }}</td>
-                                <td>{{ $row->kode_satuan }}</td>
-                                <td>{{ $row->stok_minimal }}</td>
-                                <td>{{ $row->modal }}</td>
-                                <td>{{ $row->harga_jual_1 }}</td>
-                                <td>{{ $row->stok_akhir }}</td>
-                                <td>{{ $row->hpp }}</td>
-                                <td class="option">
-                                    <div class="btn-group dropleft btn-option">
-                                        <i type="button" class="dropdown-toggle" data-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                        </i>
-                                        <div class="dropdown-menu">
-                                            {{-- <a data-pengguna='@json($p)' data-toggle="modal"
-                                                data-target="#modalLayanan" class="dropdown-item kaitkan" href="#"><i
-                                                    class="fas fa-link"> Kaitkan data</i></a> --}}
-                                            <a data-satuan='@json($row)' data-toggle="modal"
-                                                data-target="#modalLayanan" class="dropdown-item edit" href="#"><i
-                                                    class="fas fa-pen"> </i> Edit</a>
-                                            <a data-kode_satuan="{{ $row->kode_satuan }}"
-                                                class="dropdown-item hapus" href="#"><i class="fas fa-trash"> </i>
-                                                Hapus</a>
-                                        </div>
-                                    </div>
+                    <div hidden>
+                            <table id="sample_table">
+                            <tr id="">
+                            <td><span class="sn"></span>.</td>
+                            <td class="td_barcode">
+                                <img class="preloading" src="{{ asset('img/svg_animated/loading.svg') }}" alt="" width="50" >
+                                <select  name="kode_barang[]" class="form-control selectBarang">
+
+                                </select>
                                 </td>
+                            <td class="stok-akhir">--</td>
+                            <td>
+                                <input  name="stok_penyesuaian[]" type="number" class="form-control stok-penyesuaian">
+                            </td>
+                            <td class="stok-setelah-penyesuaian">--</td>
+                            <td><a class="btn btn-xs delete-record" data-id="0"><i class="fas fa-trash"></i></a></td>
                             </tr>
-                            @endforeach
+                        </table>
+                     </div>
+                    <table class="table table-bordered" id="tbl_posts">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th style="width:40%">Barcode / nama barang</th>
+                            <th>Stok akhir</th>
+                            <th>Penyesuaian stok</th>
+                            <th>Stok setelah penyesuaian</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody id="tbl_posts_body">
+                            <tr class="tb-info">
+                                <td class="text-center" colspan="6">Klik tombol tambah untuk melakukan penyesuaian barang</td>
+                            </tr>
                         </tbody>
-                    </table>
-                    <input type="hidden" name="hidden_page" id="hidden_page" value="1" />
-                    <input type="hidden" name="hidden_column_name" id="hidden_column_name" value="id" />
-                    <input type="hidden" name="hidden_sort_type" id="hidden_sort_type" value="asc" />
+                      </table>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary float-right btn-simpan">Simpan</button>
                 </div>
             </div>
+        </form>
         </div>
     </div>
 </section>
 
-<!-- Modal -->
-{{-- MODAL TAMBAH PENGGUNA --}}
-<div class="modal fade" id="modalLayanan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            {{-- <div class="modal-header">
-                <h5 class="modal-title" id="ModalLabel"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div> --}}
-
-
-            {{-- MODAL BODY UNTUK TAMBAH USER DAN EDIT USER --}}
-            <div class="modal-body" id="main-body">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <!-- MultiStep Form -->
-    <div class="row justify-content-center mt-0">
-        <div class="col-lg-12 text-center p-0 mt-3 mb-2">
-            <div class="card shadow-none px-0 pt-4 pb-0 mt-3 mb-3">
-                <h2><strong>Tambah data barang</strong></h2>
-                <p>lengkapi data sebelum lanjutkan kehalaman berikutnya</p>
-                <div class="row">
-                    <div class="col-md-12 mx-0">
-                        <form id="msform">
-                            <!-- progressbar -->
-                            <ul id="progressbar">
-                                <li class="active" id="barang"><strong>Barang</strong></li>
-                                <li id="stok"><strong>Stok</strong></li>
-                                <li id="harga"><strong>Harga</strong></li>
-                                <li id="confirm"><strong>Finish</strong></li>
-                            </ul>
-                            <!-- fieldsets -->
-                            <fieldset>
-                                <div class="form-card p-0 shadow-none">
-                                    <h2 class="fs-title">Informasi Barang</h2>
-                                    <div class="form-group">
-                                        <label for="kode_barang">kode_barang</label>
-                                        <input type="text" class="form-control" name="kode_barang" id="kode_barang" value="{{ bin2hex(random_bytes(5)) }}" readonly>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="nama_barang">nama_barang</label>
-                                        <input type="text" class="form-control" name="nama_barang" id="nama_barang">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="barcode">barcode</label>
-                                        <input type="text" class="form-control" name="barcode" id="barcode">
-                                    </div>
-                                </div>
-                                <input type="button" name="next" class="next action-button" value="Lanjut"/>
-                            </fieldset>
-                            <fieldset>
-                                <div class="form-card shadow-none p-0">
-                                    <h2 class="fs-title">Informasi stok barang</h2>
-                                    <div class="form-group">
-                                        <label for="satuan">satuan</label>
-                                        <select name="satuan" id="satuan" class="form-control select2">
-                                            @foreach ($satuan as $row)
-                                                <option value="{{ $row->kode_satuan }}">{{ $row->nama_satuan }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="stok">Stok</label>
-                                        <input type="text" class="form-control" name="stok" id="stok">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="stok_minimal">Stok minimal</label>
-                                        <input type="text" class="form-control" name="stok_minimal" id="stok_minimal">
-                                    </div>
-                                </div>
-                                <input type="button" name="previous" class="previous action-button-previous" value="kembali"/>
-                                <input type="button" name="next" class="next action-button" value="Lanjut"/>
-                            </fieldset>
-                            <fieldset>
-                                <div class="form-card p-0 shadow-none">
-                                    <h2 class="fs-title">Detail harga</h2>
-                                    <div class="form-group">
-                                        <label for="harga_jual_1">harga_jual_1</label>
-                                        <input type="text" class="form-control" name="harga_jual_1" id="harga_jual_1">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="harga_jual_2">harga_jual_2</label>
-                                        <input type="text" class="form-control" name="harga_jual_2" id="harga_jual_2">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="harga_jual_3">harga_jual_3</label>
-                                        <input type="text" class="form-control" name="harga_jual_3" id="harga_jual_3">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="harga_jual_4">harga_jual_4</label>
-                                        <input type="text" class="form-control" name="harga_jual_4" id="harga_jual_4">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="harga_jual_5">harga_jual_5</label>
-                                        <input type="text" class="form-control" name="harga_jual_5" id="harga_jual_5">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="harga_beli">harga_beli</label>
-                                        <input type="text" class="form-control" name="harga_beli" id="harga_beli">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="harga_pokok_penjualan">harga_pokok_penjualan</label>
-                                        <input type="text" class="form-control" name="harga_pokok_penjualan" id="harga_pokok_penjualan">
-                                    </div>
-                                </div>
-                                <input type="button" name="previous" class="previous action-button-previous" value="kembali"/>
-                                <input type="button" name="make_payment" class="next action-button" value="Confirm" id="btn-confirm"/>
-                            </fieldset>
-                            <fieldset>
-                                <div class="form-card shadow-none p-0">
-                                    <h2 class="fs-title text-center">Success !</h2>
-                                    <br><br>
-                                    <div class="row justify-content-center">
-                                        <div class="col-3">
-                                            <img src="https://img.icons8.com/color/96/000000/ok--v2.png" class="fit-image">
-                                        </div>
-                                    </div>
-                                    <br><br>
-                                    <div class="row justify-content-center">
-                                        <div class="col-7 text-center">
-                                            <h5>Data telah berhasil disimpan !</h5>
-                                        </div>
-                                    </div>
-                                </div>
-                            </fieldset>
-                        </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-            </div>
-            {{-- <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <button type="submit" class="btn btn-primary" id="modalBtn">Tambah</button>
-            </div> --}}
-        </div>
-    </div>
-</div>
 @endsection
 @section('script')
 <script>
     $(document).ready(function() {
 
-
-        $('#btn-confirm').on('click',function(){
-            let formData = $('#msform').serialize();
+        $('#formPenyesuaian').on('submit',function(e){
+            e.preventDefault();
+            console.log($(this).serialize())
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
-                , url: '/admin/create_pembelian'
+                , url: '/admin/save_penyesuaian_barang'
                 , method: 'post'
+                , data: $(this).serialize()
                 // , dataType: 'json'
-                , data: {
-                    formData: formData
+                , success: function(data) {
+                    if(data == 1){
+                        Swal.fire('Berhasil', 'Data telah berhasil di sesuaikan', 'success').then((result) => {
+                                    location.reload();
+                                });
+                    }
+                }
+                , error: function(err){
+                    console.log(err);
+                }
+                , beforeSend: function(){
+                    // $('.btn-simpan').prop('disabled', true)
+                }
+            })
+        })
+
+        document.onkeyup = function(e) {
+        if (e.which == 187) {
+                $('.add-record').click()
+            } else if(event.ctrlKey && event.key == "Enter") {
+                $('.btn-simpan').click();
+                }
+        };
+
+
+
+        $('.add-record').on('click',function(){
+            var content = $('#sample_table tr'),
+            size = $('#tbl_posts >tbody >tr').length + 1,
+            element = null,
+            element = content.clone();
+            element.attr('id', 'rec-'+size);
+            element.find('.delete-record').attr('data-id', size);
+            element.appendTo('#tbl_posts_body');
+            element.find('.sn').html(size);
+            $('.tb-info').hide();
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                , url: '/admin/get_all_barang'
+                , method: 'post'
+                , dataType: 'json'
+                , beforeSend: function(){
+                    element.find('.selectBarang').hide();
+                }
+                , complete: function(){
+                    element.find('.selectBarang').show();
+                    element.find('.preloading').hide();
                 }
                 , success: function(data) {
-                    console.log(data);
-                    if (data == 1) {
-                        Swal.fire('Berhasil', 'Data berhasil di tambah', 'success').then((result) => {
-                            location.reload();
-                        });
+                    let option = "";
+                    option += '<option value="">-- pilih barang --</option>';
+                    for (i in data) {
+                        option += '<option value="' + data[i].kode_barang + "," + data[i].stok_akhir + '">' + data[i].nama_barang + " " + data[i].barcode +'</option>';
                     }
+                    element.find('.selectBarang').select2();
+                    element.find('.selectBarang').html(option);
+                    element.find('.selectBarang').on('change',function(){
+                        element.find('.stok-akhir').html($(this).val().split(",")[1])
+                        element.find('.stok-setelah-penyesuaian').html(parseInt(element.find('.stok-penyesuaian').val()) + parseInt($(this).val().split(",")[1]));
+                    });
+                    element.find('.stok-penyesuaian').on('keyup',function(){
+                        element.find('.stok-setelah-penyesuaian').html(parseInt(element.find('.selectBarang').val().split(",")[1]) + parseInt($(this).val()));
+                    })
+
                 }
                 , error: function(err){
                     console.log(err);
@@ -249,74 +151,32 @@
             })
         })
 
+        $(document).delegate('a.delete-record', 'click', function(e) {
+            e.preventDefault();
+            var didConfirm = confirm("Are you sure You want to delete");
+            if (didConfirm == true) {
+            var id = $(this).attr('data-id');
+            var targetDiv = $(this).attr('targetDiv');
+            $('#rec-' + id).remove();
+            if($('#tbl_posts_body').find('tr').length < 2){
+                $('.tb-info').show();
+            }
 
+            //regnerate index number on table
+            $('#tbl_posts_body tr').each(function(index) {
+            // alert(index);
 
-
-        // TOMBOL EDIT USER
-        $('.table-user tbody').on('click', 'tr td a.edit', function() {
-            let satuan = $(this).data('satuan');
-            $('#kode_satuan').val(satuan.kode_satuan);
-            $('#nama_satuan').val(satuan.nama_satuan);
-            $('#jumlah_pcs').val(satuan.jumlah_pcs);
-            $('#id').val(satuan.kode_satuan);
-            $('#ModalLabel').html('Ubah Satuan');
-            $('#modalBtn').html('Ubah');
-            $('.modal-footer').show();
-            $('#formLayanan').attr('action', '/admin/update_satuan');
-        })
-
-        // TOMBOL TAMBAH USER
-        $('#addUserBtn').on('click', function() {
-            $('#ModalLabel').html('Tambah Layanan');
-            $('#modalBtn').html('Tambah');
-            $('.modal-footer').show();
-            $('#formLayanan').attr('action', '/admin/create_satuan');
+            $(this).find('span.sn').html(index+1);
+            });
+            return true;
+        } else {
+            return false;
+        }
         });
-
-
-            // TOMBOL HAPUS USER
-        $('.table-user tbody').on('click', 'tr td a.hapus', function() {
-            let kodeSatuan = $(this).data('kode_satuan');
-            Swal.fire({
-                title: 'Apakah yakin?'
-                , text: "Data tidak bisa kembali lagi!"
-                , type: 'warning'
-                , showCancelButton: true
-                , confirmButtonColor: '#3085d6'
-                , cancelButtonColor: '#d33'
-                , confirmButtonText: 'Ya, Konfirmasi'
-            }).then((result) => {
-                if (result.value) {
-                    $.ajax({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                        , url: '/admin/delete_satuan'
-                        , method: 'post'
-                        , dataType: 'json'
-                        , data: {
-                            kode_satuan: kodeSatuan
-                        }
-                        , success: function(data) {
-                            if (data == 1) {
-                                Swal.fire('Berhasil', 'Data telah terhapus', 'success').then((result) => {
-                                    location.reload();
-                                });
-                            }
-                        }
-                        , error: function(err){
-                            console.log(err);
-                        }
-                    })
-                }
-            })
-        });
-
-
-
-
 
     });
+
+
 
     $('#liPenyesuaianStok').addClass('active');
     $('#liDataBarang').addClass('active');
