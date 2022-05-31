@@ -109,7 +109,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="stok">Stok</label>
-                                        <input type="text" class="form-control" name="stok" id="stok">
+                                        <input type="text" class="form-control" name="stok" id="stok_akhir">
                                     </div>
                                     <div class="form-group">
                                         <label for="stok_minimal">Stok minimal</label>
@@ -253,6 +253,10 @@
                         Swal.fire('Berhasil', 'Data berhasil di tambah', 'success').then((result) => {
                             location.reload();
                         });
+                    } else if(data == 2){
+                        Swal.fire('Berhasil', 'Data berhasil di update', 'success').then((result) => {
+                            location.reload();
+                        });
                     }
                 }
                 , error: function(err){
@@ -266,29 +270,33 @@
 
         // TOMBOL EDIT USER
         $('.table-user tbody').on('click', 'tr td a.edit', function() {
-            let satuan = $(this).data('satuan');
-            $('#kode_satuan').val(satuan.kode_satuan);
-            $('#nama_satuan').val(satuan.nama_satuan);
-            $('#jumlah_pcs').val(satuan.jumlah_pcs);
-            $('#id').val(satuan.kode_satuan);
-            $('#ModalLabel').html('Ubah Satuan');
-            $('#modalBtn').html('Ubah');
-            $('.modal-footer').show();
-            $('#formLayanan').attr('action', '/admin/update_satuan');
+            let barang = $(this).data('barang');
+            console.log(barang.stok_akhir);
+            $('#kode_barang').val(barang.kode_barang);
+            $('#nama_barang').val(barang.nama_barang);
+            $('#barcode').val(barang.barcode);
+            $('#satuan').val(barang.kode_satuan).change();
+            $('#stok_akhir').val(barang.stok_akhir);
+            $('#harga_jual_1').val(barang.harga_jual_1);
+            $('#harga_jual_2').val(barang.harga_jual_2);
+            $('#harga_jual_3').val(barang.harga_jual_3);
+            $('#harga_jual_4').val(barang.harga_jual_4);
+            $('#harga_jual_5').val(barang.harga_jual_5);
+            $('#harga_jual').val(barang.modal);
+            $('#harga_pokok_penjualan').val(barang.hpp);
+            $('#stok_minimal').val(barang.stok_minimal);
+            $('#msform').attr('action', '/admin/update_pembelian');
         })
 
         // TOMBOL TAMBAH USER
         $('#addUserBtn').on('click', function() {
-            $('#ModalLabel').html('Tambah Layanan');
-            $('#modalBtn').html('Tambah');
-            $('.modal-footer').show();
-            $('#formLayanan').attr('action', '/admin/create_satuan');
+            $('#msform').attr('action', '/admin/create_pembelian');
         });
 
 
             // TOMBOL HAPUS USER
         $('.table-user tbody').on('click', 'tr td a.hapus', function() {
-            let kodeSatuan = $(this).data('kode_satuan');
+            let kodeBarang = $(this).data('kode_barang');
             Swal.fire({
                 title: 'Apakah yakin?'
                 , text: "Data tidak bisa kembali lagi!"
@@ -303,11 +311,11 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         }
-                        , url: '/admin/delete_satuan'
+                        , url: '/admin/delete_pembelian'
                         , method: 'post'
                         , dataType: 'json'
                         , data: {
-                            kode_satuan: kodeSatuan
+                            kode_barang: kodeBarang
                         }
                         , success: function(data) {
                             if (data == 1) {

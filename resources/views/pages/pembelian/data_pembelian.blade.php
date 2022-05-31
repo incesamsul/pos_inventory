@@ -19,10 +19,10 @@
                 {{-- <a data-pengguna='@json($p)' data-toggle="modal"
                     data-target="#modalLayanan" class="dropdown-item kaitkan" href="#"><i
                         class="fas fa-link"> Kaitkan data</i></a> --}}
-                <a data-satuan='@json($row)' data-toggle="modal"
+                <a data-barang='@json($row)' data-toggle="modal"
                     data-target="#modalLayanan" class="dropdown-item edit" href="#"><i
                         class="fas fa-pen"> </i> Edit</a>
-                <a data-kode_satuan="{{ $row->kode_satuan }}"
+                <a data-kode_barang="{{ $row->kode_barang }}"
                     class="dropdown-item hapus" href="#"><i class="fas fa-trash"> </i>
                     Hapus</a>
             </div>

@@ -88,8 +88,8 @@
                     <div class="form-group">
                         <label>Role</label>
                         <select class="form-control" name="tipe_pengguna" id="tipe-pengguna">
-                            <option>user</option>
-                            <option>penilai</option>
+                            <option>Kasir</option>
+                            <option>Pimpinan</option>
                             <option>Administrator</option>
                         </select>
                     </div>

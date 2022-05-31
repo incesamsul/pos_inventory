@@ -161,22 +161,42 @@ class Admin extends Controller
         $box = $request->all();
         $formData =  [];
         parse_str($box['formData'], $formData);
-        Barang::create([
-            'kode_barang' => $formData['kode_barang'],
-            'nama_barang' => $formData['nama_barang'],
-            'barcode' => $formData['barcode'],
-            'kode_satuan' => $formData['satuan'],
-            'stok_akhir' => $formData['stok'],
-            'stok_minimal' => $formData['stok_minimal'],
-            'harga_jual_1' => $formData['harga_jual_1'],
-            'harga_jual_2' => $formData['harga_jual_2'],
-            'harga_jual_3' => $formData['harga_jual_3'],
-            'harga_jual_4' => $formData['harga_jual_4'],
-            'harga_jual_5' => $formData['harga_jual_5'],
-            'modal' => $formData['harga_beli'],
-            'hpp' => $formData['harga_pokok_penjualan'],
-        ]);
-        return 1;
+        $barang = Barang::where('kode_barang', $formData['kode_barang']);
+        if (!$barang->first()) {
+            Barang::create([
+                'kode_barang' => $formData['kode_barang'],
+                'nama_barang' => $formData['nama_barang'],
+                'barcode' => $formData['barcode'],
+                'kode_satuan' => $formData['satuan'],
+                'stok_akhir' => $formData['stok'],
+                'stok_minimal' => $formData['stok_minimal'],
+                'harga_jual_1' => $formData['harga_jual_1'],
+                'harga_jual_2' => $formData['harga_jual_2'],
+                'harga_jual_3' => $formData['harga_jual_3'],
+                'harga_jual_4' => $formData['harga_jual_4'],
+                'harga_jual_5' => $formData['harga_jual_5'],
+                'modal' => $formData['harga_beli'],
+                'hpp' => $formData['harga_pokok_penjualan'],
+            ]);
+            return 1;
+        } else {
+            $barang->update([
+                'kode_barang' => $formData['kode_barang'],
+                'nama_barang' => $formData['nama_barang'],
+                'barcode' => $formData['barcode'],
+                'kode_satuan' => $formData['satuan'],
+                'stok_akhir' => $formData['stok'],
+                'stok_minimal' => $formData['stok_minimal'],
+                'harga_jual_1' => $formData['harga_jual_1'],
+                'harga_jual_2' => $formData['harga_jual_2'],
+                'harga_jual_3' => $formData['harga_jual_3'],
+                'harga_jual_4' => $formData['harga_jual_4'],
+                'harga_jual_5' => $formData['harga_jual_5'],
+                'modal' => $formData['harga_beli'],
+                'hpp' => $formData['harga_pokok_penjualan'],
+            ]);
+            return 2;
+        }
     }
 
     public function updatePembelian(Request $request)
@@ -193,8 +213,8 @@ class Admin extends Controller
 
     public function deletePembelian(Request $request)
     {
-        Satuan::where([
-            ['kode_satuan', '=', $request->kode_satuan]
+        Barang::where([
+            ['kode_barang', '=', $request->kode_barang]
         ])->delete();
         return 1;
     }
