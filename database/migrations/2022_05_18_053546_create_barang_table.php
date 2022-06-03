@@ -14,7 +14,7 @@ class CreateBarangTable extends Migration
     public function up()
     {
         Schema::create('barang', function (Blueprint $table) {
-            $table->string('kode_barang')->primary();
+            $table->string('kode_barang', 50)->primary();
             $table->string('nama_barang', 255);
             $table->string('barcode', 50);
             $table->string('kode_satuan', 50);
@@ -29,6 +29,8 @@ class CreateBarangTable extends Migration
             $table->integer('stok_akhir');
             $table->integer('hpp');
             $table->timestamps();
+
+            $table->foreign('kode_satuan')->references('kode_satuan')->on('satuan')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

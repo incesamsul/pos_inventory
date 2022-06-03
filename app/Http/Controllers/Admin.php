@@ -7,6 +7,7 @@ use App\Models\JenisLayanan;
 use App\Models\Loundry;
 use App\Models\Pelanggan;
 use App\Models\Pembelian;
+use App\Models\Penjualan;
 use App\Models\Satuan;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -71,7 +72,7 @@ class Admin extends Controller
 
     public function getAllBarang()
     {
-        $barang = Barang::all();
+        $barang = Barang::all()->load('satuan');
         return response()->json($barang);
     }
 

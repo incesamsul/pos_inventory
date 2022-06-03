@@ -5,15 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Satuan extends Model
+class Penjualan extends Model
 {
     use HasFactory;
-    protected $table = 'satuan';
-    protected $guarded = [];
-
+    protected $table = 'penjualan';
+    protected $guarded = ['id_penjualan'];
 
     public function barang()
     {
-        return $this->hasMany(Barang::class, 'kode_satuan', 'kode_satuan');
+        return $this->hasOne(Barang::class, 'kode_barang', 'kode_barang');
     }
 }

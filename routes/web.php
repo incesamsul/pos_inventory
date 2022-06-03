@@ -5,7 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 
 use App\Http\Controllers\General;
 use App\Http\Controllers\Home;
-
+use App\Http\Controllers\Kasir;
 use App\Http\Controllers\Penilai;
 
 use App\Http\Controllers\UserController;
@@ -38,7 +38,7 @@ Route::group(['middleware' => ['guest']], function () {
 });
 
 // GENERAL CONTROLLER ROUTE
-Route::group(['middleware' => ['auth', 'ceklevel:Administrator,user,penilai']], function () {
+Route::group(['middleware' => ['auth', 'ceklevel:Administrator,kasir,pimpinan']], function () {
 
     Route::get('/dashboard', [General::class, 'dashboard']);
     Route::get('/profile', [General::class, 'profile']);
@@ -98,5 +98,17 @@ Route::group(['middleware' => ['auth', 'ceklevel:Administrator']], function () {
 
         // PENYESUAIAN STOK
         Route::get('/penyesuaian_stok', [Admin::class, 'penyesuaianStok']);
+    });
+});
+// ADMIN ROUTE
+Route::group(['middleware' => ['auth', 'ceklevel:kasir']], function () {
+    Route::group(['prefix' => 'kasir'], function () {
+        // GET REQUEST
+
+        Route::get('/penjualan', [Kasir::class, 'penjualan']);
+        Route::get('/data_penjualan', [Kasir::class, 'dataPenjualan']);
+        Route::post('/get_all_barang', [Admin::class, 'getAllBarang']);
+
+        Route::post('/save_penjualan_barang', [Kasir::class, 'savePenjualanBarang']);
     });
 });

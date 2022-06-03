@@ -47,6 +47,18 @@
             {{-- END OF MENU ADMIN --}}
             @endif
 
+            @if (auth()->user()->role == 'kasir')
+            {{-- MENU ADMIN --}}
+            <li class="menu-header">Kasir</li>
+
+            <li class="" id="liPenjualan"><a class="nav-link" href="{{ URL::to('/kasir/penjualan') }}"><i
+                class="fa-solid fa-tape"></i><span>Penjualan</span></a></li>
+            <li class="" id="liDataPenjualan"><a class="nav-link" href="{{ URL::to('/kasir/data_penjualan') }}"><i
+                class="fa-solid fa-tape"></i><span>Data Penjualan</span></a></li>
+
+            {{-- END OF MENU ADMIN --}}
+            @endif
+
 
 
 

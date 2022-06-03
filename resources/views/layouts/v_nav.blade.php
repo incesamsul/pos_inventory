@@ -1,4 +1,4 @@
-<body id="loading-asset" data-asset_url="{{ asset('img/svg_animated/loading.svg') }}">
+<body id="loading-asset" data-asset_url="{{ asset('img/svg_animated/loading.svg') }}" class="{{ auth()->user()->role == "kasir" ? "sidebar-mini" : "" }}">
     <div id="app">
         <div class="main-wrapper">
             <div class="navbar-bg"></div>
