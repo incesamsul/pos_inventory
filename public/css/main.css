@@ -59,6 +59,11 @@ body.show-spinner>main {
     font-size: 14px !important;
 }
 
+.sidebar-mini .sidebar-menu li.active a {
+    color: white !important;
+    font-size: 14px !important;
+}
+
 
 /*
 .sidebar-menu li.menu-header {

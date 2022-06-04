@@ -28,7 +28,7 @@
         <div class="container-fluid login-wrapper ">
             <div class="row login-row">
                 <div class="col-md-4 login-sec ">
-                    <h2 class="text-center mt-5">based</h2>
+                    <h2 class="text-center mt-5">Toko surya mandiri sejahtera</h2>
                     @if (session('fail'))
                     <p class="text-danger">{{ session('fail') }}</p>
                     @endif
@@ -61,7 +61,7 @@
                         </ol>
                         <div class="carousel-inner" role="listbox">
                             <div class="carousel-item active">
-                                <img class="d-block img-fluid" src="{{ asset('img/login_img/1.jpg') }}"
+                                <img class="d-block img-fluid" src="{{ asset('img/login_img/1.jpeg') }}"
                                     alt="First slide">
                                 <div class="carousel-caption d-none d-md-block">
 
@@ -69,7 +69,7 @@
                             </div>
                             <?php for ($i = 2; $i <= 3; $i++) : ?>
                             <div class="carousel-item">
-                                <img class="d-block img-fluid" src="{{ asset('img/login_img/'.$i.'.jpg') }}"
+                                <img class="d-block img-fluid" src="{{ asset('img/login_img/'.$i.'.jpeg') }}"
                                 >
                                 <div class="carousel-caption d-none d-md-block">
 
