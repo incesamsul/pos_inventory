@@ -9,6 +9,7 @@
                 <div class="card-header d-flex  justify-content-between">
                     <h4>Penjualan</h4>
                     <div class="table-tools d-flex justify-content-around ">
+                        <img class="preloading" src="{{ asset('img/svg_animated/loading.svg') }}" alt="" width="50" >
                         <input type="text" class="form-control card-form-header mr-3"
                             placeholder="Cari Data Pengguna ..." id="searchbox">
                         <button type="button" class="btn btn-primary add-record float-right" data-toggle="modal" id="addUserBtn"
@@ -16,40 +17,42 @@
                     </div>
                 </div>
                 <div class="card-body ">
+                    <div class="text-center">
+                        <img class="preloading" src="{{ asset('img/svg_animated/loading.svg') }}" alt="" width="150" >
+                    </div>
                     <div hidden>
                             <table id="sample_table">
                             <tr id="">
                             <td><span class="sn"></span>.</td>
-                            <td class="td_barcode">
-                                <img class="preloading" src="{{ asset('img/svg_animated/loading.svg') }}" alt="" width="50" >
+                            <td class="td_barcode" style="padding-left: 9px;padding-right:9px;">
                                 <select  name="kode_barang[]" class="form-control selectBarang">
 
                                 </select>
                                 </td>
                             <td class="harga">--</td>
-                            <td>
+                            <td style="padding-left: 9px;padding-right:9px;">
                                 <input  name="qty[]" type="text" class="form-control qty" style="padding: 10px">
                             </td>
                             <td class="satuan">satuan</td>
                             <td>%disc</td>
                             <td>rpdisc</td>
                             <td class="jumlah">--</td>
-                            <td><a class="btn btn-xs delete-record" data-id="0"><i class="fas fa-trash"></i></a></td>
+                            <td ><a class="btn btn-xs delete-record" data-id="0"><i class="fas fa-trash"></i></a></td>
                             </tr>
                         </table>
                      </div>
-                    <table class="table table-bordered" id="tbl_posts">
+                    <table class="table table-bordered " id="tbl_posts">
                         <thead>
                           <tr>
                             <th>#</th>
-                            <th style="width:40%">Barcode / nama barang</th>
+                            <th style="width:514px; max-width:200px">Barcode / nama barang</th>
                             <th>Harga</th>
                             <th>QTY</th>
                             <th>Satuan</th>
                             <th>%Disc</th>
                             <th>RpDisc</th>
                             <th>Jumlah</th>
-                            <th>Action</th>
+                            <th style="width:40px">Action</th>
                           </tr>
                         </thead>
                         <tbody id="tbl_posts_body">
@@ -107,6 +110,12 @@
 <script>
     $(document).ready(function() {
 
+        // hide element at first load
+        $('#searchbox').hide();
+        $('.add-record').hide();
+        $('#tbl_posts').hide();
+        $('.btn-simpan').hide();
+
         $('#formPenyesuaian').on('submit',function(e){
             e.preventDefault();
             console.log($(this).serialize())
@@ -144,64 +153,83 @@
         };
 
 
-
-        $('.add-record').on('click',function(){
-            var content = $('#sample_table tr'),
-            size = $('#tbl_posts >tbody >tr').length + 1,
-            element = null,
-            element = content.clone();
-            element.attr('id', 'rec-'+size);
-            element.find('.delete-record').attr('data-id', size);
-            element.appendTo('#tbl_posts_body');
-            element.find('.sn').html(size);
-            $('.tb-info').hide();
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-                , url: '/kasir/get_all_barang'
-                , method: 'post'
-                , dataType: 'json'
-                , beforeSend: function(){
-                    element.find('.selectBarang').hide();
-                }
-                , complete: function(){
-                    element.find('.selectBarang').show();
-                    element.find('.preloading').hide();
-                }
-                , success: function(data) {
-                    let option = "";
-                    option += '<option value="">-- pilih barang --</option>';
-                    for (i in data) {
-                        let satuan = data[i].satuan !== null ? data[i].satuan.nama_satuan : data[i].kode_satuan;
-                        option += '<option value="' + data[i].kode_barang + "," + data[i].harga_jual_1 + "," + satuan  + '">' + data[i].nama_barang + " " + data[i].barcode +'</option>';
-                    }
-                    element.find('.selectBarang').select2();
-                    element.find('.selectBarang').html(option);
-                    element.find('.selectBarang').on('change',function(){
-                        element.find('.harga').html(addCommas($(this).val().split(",")[1]))
-                        element.find('.satuan').html($(this).val().split(",")[2])
-                        element.find('.jumlah').html(addCommas(parseInt(element.find('.qty').val()) * parseInt($(this).val().split(",")[1])));
-
+        function requestAllData(){
+            return $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                        , url: '/kasir/get_all_barang'
+                        , method: 'post'
+                        , dataType: 'json'
+                        , beforeSend: function(){
+                            // element.find('.selectBarang').hide();
+                        }
+                        , complete: function(){
+                            $('#searchbox').show();
+                            $('.add-record').show();
+                            $('#tbl_posts').show();
+                            $('.btn-simpan').show();
+                            $('.preloading').hide();
+                        }
+                        , success: function(data) {
+                            // callback(data);
+                        }
+                        , error: function(err){
+                            console.log(err);
+                        }
                     });
-                    element.find('.qty').on('keyup',function(){
-                        let total = 0;
-                        setTimeout(() => {
-                            $('.jumlah').each(function(){
-                                total += parseFloat($(this).text().split(",").join(""), 10) || 0;
-                            })
-                            $('.total').html("TOTAL : " + addCommas(total))
-                        }, 500);
-                        element.find('.jumlah').html(addCommas(parseInt(element.find('.selectBarang').val().split(",")[1]) * parseInt($(this).val())));
-                    })
+        }
 
+        $.when(requestAllData()).done(function(data){
+            $('.add-record').on('click',function(){
+                var content = $('#sample_table tr'),
+                size = $('#tbl_posts >tbody >tr').length + 1,
+                element = null,
+                element = content.clone();
+                element.attr('id', 'rec-'+size);
+                element.find('.delete-record').attr('data-id', size);
+                element.appendTo('#tbl_posts_body');
+                element.find('.sn').html(size);
+                $('.tb-info').hide();
+                
+                let option = "";
+                option += '<option value="">-- pilih barang --</option>';
+                for (i in data) {
+                    let satuan = data[i].satuan !== null ? data[i].satuan.nama_satuan : data[i].kode_satuan;
+                    option += '<option value="' + data[i].kode_barang + "," + data[i].harga_jual_1 + "," + satuan  + '">' + data[i].nama_barang + " " + data[i].barcode +'</option>';
                 }
-                , error: function(err){
-                    console.log(err);
-                }
+                element.find('.selectBarang').select2({
+                    width: 'element'
+                });
+                
+                
+                element.find('.selectBarang').html(option);
+
+
+                element.find('.selectBarang').on('change',function(){
+                    element.find('.harga').html(addCommas($(this).val().split(",")[1]))
+                    element.find('.satuan').html($(this).val().split(",")[2])
+                    element.find('.jumlah').html(addCommas(parseInt(element.find('.qty').val()) * parseInt($(this).val().split(",")[1])));
+
+                });
+                element.find('.qty').on('keyup',function(){
+                    let total = 0;
+                    setTimeout(() => {
+                        $('.jumlah').each(function(){
+                            total += parseFloat($(this).text().split(",").join(""), 10) || 0;
+                        })
+                        $('.total').html("TOTAL : " + addCommas(total))
+                    }, 500);
+                    element.find('.jumlah').html(addCommas(parseInt(element.find('.selectBarang').val().split(",")[1]) * parseInt($(this).val())));
+                })
             })
-        })
+            
 
+        });
+
+
+
+        
         $(document).delegate('a.delete-record', 'click', function(e) {
             e.preventDefault();
             var didConfirm = confirm("Are you sure You want to delete");
