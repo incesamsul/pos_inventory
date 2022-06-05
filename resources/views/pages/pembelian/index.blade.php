@@ -90,6 +90,10 @@
                                         <input type="text" class="form-control" name="nama_barang" id="nama_barang">
                                     </div>
                                     <div class="form-group">
+                                        <label for="tgl_masuk">tgl_masuk</label>
+                                        <input type="date" class="form-control" name="tgl_masuk" id="tgl_masuk">
+                                    </div>
+                                    <div class="form-group">
                                         <label for="barcode">barcode</label>
                                         <input type="text" class="form-control" name="barcode" id="barcode">
                                     </div>
@@ -101,7 +105,7 @@
                                     <h2 class="fs-title">Informasi stok barang</h2>
                                     <div class="form-group">
                                         <label for="satuan">satuan</label>
-                                        <select name="satuan" id="satuan" class="form-control select2">
+                                        <select name="satuan" id="satuan" class="form-control select2" >
                                             @foreach ($satuan as $row)
                                                 <option value="{{ $row->kode_satuan }}">{{ $row->nama_satuan }}</option>
                                             @endforeach

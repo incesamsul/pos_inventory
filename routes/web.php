@@ -98,6 +98,7 @@ Route::group(['middleware' => ['auth', 'ceklevel:Administrator']], function () {
 
         // PENYESUAIAN STOK
         Route::get('/penyesuaian_stok', [Admin::class, 'penyesuaianStok']);
+        Route::get('/stok_dibawah_minimum', [Admin::class, 'stokDibawahMinimum']);
     });
 });
 // ADMIN ROUTE

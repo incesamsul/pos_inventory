@@ -90,6 +90,11 @@ body.show-spinner>* {
     opacity: 0;
 }
 
+.select2 {
+    margin-right: 10px !important;
+    max-width: 400px;
+}
+
 
 /* Spinner */
 
@@ -346,5 +351,33 @@ table tr * {
     100% {
         opacity: 0;
         visibility: hidden;
+    }
+}
+
+
+/* cetak css */
+
+@media screen {
+    #printSection {
+        display: none;
+    }
+}
+
+@media print {
+    body {
+        background-color: white !important;
+    }
+    body * {
+        visibility: hidden;
+    }
+    #printSection,
+    #printSection * {
+        visibility: visible;
+    }
+    #printSection {
+        width: 100vw;
+        position: absolute;
+        left: 0;
+        top: 0;
     }
 }

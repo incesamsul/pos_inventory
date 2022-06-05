@@ -33,16 +33,17 @@
 
 
             <li class="nav-item dropdown " id="liDataBarang">
-                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fa-solid fa-database"></i>
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-database"></i>
                     <span>Data Barang</span></a>
                     <ul class="dropdown-menu">
                         <li id="liPembelian"><a class="nav-link" href="/admin/pembelian">Pembelian</a></li>
                         <li id="liPenyesuaianStok"><a class="nav-link" href="/admin/penyesuaian_stok">Penyesuaian Stok</a></li>
+                        <li id="liStokDibawahMin"><a class="nav-link" href="/admin/stok_dibawah_minimum">Stok Dibawah Minimum</a></li>
                     </ul>
                 </li>
 
             <li class="" id="liSatuan"><a class="nav-link" href="{{ URL::to('/admin/satuan') }}"><i
-                class="fa-solid fa-tape"></i><span>Satuan</span></a></li>
+                class="fas fa-tape"></i><span>Satuan</span></a></li>
 
             {{-- END OF MENU ADMIN --}}
             @endif

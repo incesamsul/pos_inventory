@@ -17,7 +17,9 @@ class CreatePenjualanTable extends Migration
             $table->increments('id_penjualan');
             $table->string('kode_barang', 50);
             $table->date('tgl_penjualan');
+            $table->integer('harga_jual');
             $table->integer('qty');
+            $table->integer('bayar');
             $table->integer('jumlah');
             $table->string('segment');
             $table->timestamps();

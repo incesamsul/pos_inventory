@@ -63,6 +63,12 @@ class Admin extends Controller
         return view('pages.penyesuaian_stok.index', $data);
     }
 
+    public function stokDibawahMinimum()
+    {
+        $data['barang'] = Barang::where('stok_akhir', '<', 'stok_minimal')->get();
+        return view('pages.stok_dibawah_minimum.index', $data);
+    }
+
 
     public function searchBarang(Request $request)
     {
@@ -166,6 +172,7 @@ class Admin extends Controller
         if (!$barang->first()) {
             Barang::create([
                 'kode_barang' => $formData['kode_barang'],
+                'tgl_masuk' => $formData['tgl_masuk'],
                 'nama_barang' => $formData['nama_barang'],
                 'barcode' => $formData['barcode'],
                 'kode_satuan' => $formData['satuan'],
