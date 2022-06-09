@@ -1,6 +1,7 @@
 @extends('layouts.v_template')
 
 @section('content')
+
 <section class="section">
     <div class="row">
         <div class="col-lg-12">
@@ -82,7 +83,7 @@
                         <img class="preloading" src="{{ asset('img/svg_animated/loading.svg') }}" alt="" width="50" >
                         <button type="button" class="btn btn-primary btn-print float-right" data-toggle="modal" data-target="#printPreview"><i class="fas fa-print"></i></button>
                     </div>
-                    
+
                 </div>
                 <div class="card-body">
                     <table class="table table-striped">
@@ -138,16 +139,16 @@
                 <td colspan = '4'><div style='text-align:right; color:black'>Total : </div></td><td style='text-align:right; font-size:16pt; color:black'>{{ number_format($segment_penjualan_terakhir_hari_ini->sum('jumlah')) }}</td>
             </tr>
             <tr>
-                <td colspan = '4'><div style='text-align:right; color:black'>Cash : </div></td><td style='text-align:right; font-size:16pt; color:black'>{{ number_format($segment_penjualan_terakhir_hari_ini[0]->bayar) }}</td>
+                <td colspan = '4'><div style='text-align:right; color:black'>Cash : </div></td><td style='text-align:right; font-size:16pt; color:black'>{{ number_format(count($segment_penjualan_terakhir_hari_ini) > 0 ? $segment_penjualan_terakhir_hari_ini[0]->bayar : 0) }}</td>
             </tr>
             <tr>
-                <td colspan = '4'><div style='text-align:right; color:black'>Change : </div></td><td style='text-align:right; font-size:16pt; color:black'>{{ number_format($segment_penjualan_terakhir_hari_ini[0]->bayar - $segment_penjualan_terakhir_hari_ini->sum('jumlah')) }}</td>
+                <td colspan = '4'><div style='text-align:right; color:black'>Change : </div></td><td style='text-align:right; font-size:16pt; color:black'>{{ number_format(count($segment_penjualan_terakhir_hari_ini) > 0 ? $segment_penjualan_terakhir_hari_ini[0]->bayar : 0 - $segment_penjualan_terakhir_hari_ini->sum('jumlah')) }}</td>
             </tr>
         </tbody>
     </table>
 </div>
 
-  
+
   <!-- Modal -->
   <div class="modal fade" id="printPreview" tabindex="-1" aria-labelledby="printPreviewLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -183,10 +184,10 @@
                         <td colspan = '4'><div style='text-align:right; color:black'>Total : </div></td><td style='text-align:right; font-size:16pt; color:black'>{{ number_format($segment_penjualan_terakhir_hari_ini->sum('jumlah')) }}</td>
                     </tr>
                     <tr>
-                        <td colspan = '4'><div style='text-align:right; color:black'>Cash : </div></td><td style='text-align:right; font-size:16pt; color:black'>{{ number_format($segment_penjualan_terakhir_hari_ini[0]->bayar) }}</td>
+                        <td colspan = '4'><div style='text-align:right; color:black'>Cash : </div></td><td style='text-align:right; font-size:16pt; color:black'>{{ number_format(count($segment_penjualan_terakhir_hari_ini) > 0 ? $segment_penjualan_terakhir_hari_ini[0]->bayar : 0) }}</td>
                     </tr>
                     <tr>
-                        <td colspan = '4'><div style='text-align:right; color:black'>Change : </div></td><td style='text-align:right; font-size:16pt; color:black'>{{ number_format($segment_penjualan_terakhir_hari_ini[0]->bayar - $segment_penjualan_terakhir_hari_ini->sum('jumlah')) }}</td>
+                        <td colspan = '4'><div style='text-align:right; color:black'>Change : </div></td><td style='text-align:right; font-size:16pt; color:black'>{{ number_format(count($segment_penjualan_terakhir_hari_ini) > 0 ? $segment_penjualan_terakhir_hari_ini[0]->bayar : 0 - $segment_penjualan_terakhir_hari_ini->sum('jumlah')) }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -210,7 +211,7 @@
             $('.pembayaran').html("BAYAR : " + addCommas($(this).val()));
             $('.kembalian').html("KEMBALIAN : " + addCommas($(this).val() - parseInt($('.total').text().split(" : ")[1].split(",").join("")))) ;
             $('#inputPembayaran').val($(this).val());
-            if($(this).val() > parseInt($('.total').text().split(" : ")[1].split(",").join(""))){
+            if($(this).val() >= parseInt($('.total').text().split(" : ")[1].split(",").join(""))){
                 $('.btn-simpan').prop('disabled',false);
             } else {
                 $('.btn-simpan').prop('disabled',true);
@@ -268,7 +269,7 @@
                 $('.btn-print').click();
             } else if(event.ctrlKey && e.which == 77) { // ctrl + m
                 window.open(window.location.href, '_blank');
-            } 
+            }
         };
 
 
@@ -302,7 +303,7 @@
 
         $.when(requestAllData()).done(function(data){
             $('.add-record').on('click',function(){
-                
+
                 var content = $('#sample_table tr'),
                 size = $('#tbl_posts >tbody >tr').length + 1,
                 element = null,
@@ -312,7 +313,7 @@
                 element.appendTo('#tbl_posts_body');
                 element.find('.sn').html(size);
                 $('.tb-info').hide();
-                
+
                 let option = "";
                 option += '<option value="">-- pilih barang --</option>';
                 for (i in data) {
@@ -322,13 +323,13 @@
                 element.find('.selectBarang').select2({
                     width: 'element'
                 });
-                
-                
+
+
                 element.find('.selectBarang').html(option);
 
 
                 element.find('.selectBarang').on('change',function(){
-                
+
                     let total = 0;
                     setTimeout(() => {
                         $('.jumlah').each(function(){
@@ -346,7 +347,7 @@
                         hargaHTML += '<option value="custom">Custom</option>'
                         hargaHTML += '</select>';
                         element.find('.harga').html(hargaHTML);
-                        
+
                         element.find('.harga_jual').on('change', function(){
                             if($(this).val() == 'custom'){
                                 let customHTML = '<input type="text" class="form-control harga_jual" name="harga_jual[]">';
@@ -389,13 +390,13 @@
                     element.find('.jumlah').html(addCommas(parseInt(element.find('.harga_jual').val()) * parseInt($(this).val())));
                 })
             })
-            
+
 
         });
 
 
 
-        
+
         $(document).delegate('a.delete-record', 'click', function(e) {
             e.preventDefault();
             let total = 0;
