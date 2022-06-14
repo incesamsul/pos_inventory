@@ -49,14 +49,27 @@
             @endif
 
             @if (auth()->user()->role == 'kasir')
-            {{-- MENU ADMIN --}}
+            {{-- MENU KASIR --}}
             <li class="menu-header">Kasir</li>
 
             <li class="" id="liPenjualan"><a class="nav-link" href="{{ URL::to('/kasir/penjualan') }}"><i class="fas fa-cart-plus"></i><span>Penjualan</span></a></li>
             <li class="" id="liDataPenjualan"><a class="nav-link" href="{{ URL::to('/kasir/data_penjualan') }}"><i
                 class="fas fa-tape"></i><span>Data Penjualan</span></a></li>
+            <li class="" id="liDataKasir"><a class="nav-link" href="{{ URL::to('/kasir/data_kasir') }}"><i
+                class="fas fa-database"></i><span>Data Kasir</span></a></li>
 
-            {{-- END OF MENU ADMIN --}}
+            {{-- END OF MENU KASIR --}}
+            @endif
+            @if (auth()->user()->role == 'pimpinan')
+            {{-- MENU PIMPINAN --}}
+            <li class="menu-header">Pimpinan</li>
+
+            <li class="" id="liDataPenjualan"><a class="nav-link" href="{{ URL::to('/pimpinan/data_penjualan') }}"><i
+                class="fas fa-tape"></i><span>Data Penjualan</span></a></li>
+            <li class="" id="liGrafikPemasukan"><a class="nav-link" href="{{ URL::to('/pimpinan/grafik_pemasukan') }}"><i
+                class="fas fa-chart-bar"></i><span>Grafik Pemasukan</span></a></li>
+
+            {{-- END OF MENU PIMPINAN --}}
             @endif
 
 

@@ -7,7 +7,7 @@ use App\Http\Controllers\General;
 use App\Http\Controllers\Home;
 use App\Http\Controllers\Kasir;
 use App\Http\Controllers\Penilai;
-
+use App\Http\Controllers\Pimpinan;
 use App\Http\Controllers\UserController;
 
 use Illuminate\Support\Facades\Route;
@@ -107,9 +107,21 @@ Route::group(['middleware' => ['auth', 'ceklevel:kasir']], function () {
         // GET REQUEST
 
         Route::get('/penjualan', [Kasir::class, 'penjualan']);
+        Route::get('/data_kasir', [Kasir::class, 'dataKasir']);
+        Route::get('/data_kasir/detail/{tgl}/{segment}', [Kasir::class, 'detailDataKasir']);
+        Route::get('/data_kasir/edit/{tgl}/{segment}', [Kasir::class, 'editDataKasir']);
         Route::get('/data_penjualan', [Kasir::class, 'dataPenjualan']);
         Route::post('/get_all_barang', [Admin::class, 'getAllBarang']);
 
         Route::post('/save_penjualan_barang', [Kasir::class, 'savePenjualanBarang']);
+        Route::post('/update_penjualan_barang', [Kasir::class, 'updatePenjualanBarang']);
+    });
+});
+
+
+Route::group(['middleware' => ['auth', 'ceklevel:pimpinan']], function () {
+    Route::group(['prefix' => 'pimpinan'], function () {
+        Route::get("/data_penjualan", [Kasir::class, 'dataPenjualan']);
+        Route::get("/grafik_pemasukan", [Pimpinan::class, 'grafikPemasukan']);
     });
 });

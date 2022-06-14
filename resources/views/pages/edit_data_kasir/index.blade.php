@@ -8,10 +8,10 @@
             <form id="formPenyesuaian">
             <div class="card">
                 <div class="card-header d-flex  justify-content-between">
-                    <h4>Penjualan</h4>
+                    <h4>edit kasir tgl {{ $tgl }} segment {{ $segment }}</h4>
                     <div class="table-tools d-flex justify-content-around ">
                         <img class="preloading" src="{{ asset('img/svg_animated/loading.svg') }}" alt="" width="50" >
-                        <input type="text" class="form-control card-form-header mr-3"
+                        <input type="text" class="form-control card-form-header mr-3" value="{{ $edit_data_kasir[0]->bayar }}"
                             placeholder="Masukkan pembayaran ..." id="pembayaran" onkeypress='validate(event)'>
                         <button type="button" class="btn btn-primary add-record float-right" data-toggle="modal" id="addUserBtn"
                             data-target="#modalLayanan"><i class="fas fa-plus"></i></button>
@@ -42,8 +42,11 @@
                             </tr>
                         </table>
                      </div>
+                     <?php $total = 0; ?>
                     <table class="table table-bordered " id="tbl_posts">
                         <thead>
+                            <input type="hidden" name="tgl" value="{{ $tgl }}">
+                            <input type="hidden" name="segment" value="{{ $segment }}">
                           <tr>
                             <th>#</th>
                             <th style="width:514px; max-width:300px">Barcode / nama barang</th>
@@ -57,16 +60,40 @@
                           </tr>
                         </thead>
                         <tbody id="tbl_posts_body">
-                            <tr class="tb-info">
+                            @foreach ($edit_data_kasir as $row)
+                            <?php $total+=($row->harga_jual * $row->qty) ?>
+                                <tr id="rec-{{ $loop->iteration }}">
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td class="td_barcode" style="padding-left: 9px;padding-right:9px;">
+                                        <select readonly  name="kode_barang[]" class="form-control selectBarang">
+                                            <option value="{{ $row->kode_barang .",". $row->harga_jual_1 .",". $row->harga_jual_2.",". $row->harga_jual_3.",". $row->harga_jual_4.",". $row->harga_jual_5 }}">{{ $row->barang->nama_barang }}</option>
+                                        </select>
+                                    </td>
+                                    <td style="padding-left: 9px;padding-right:9px;" class="harga">
+                                        <select readonly  name="harga_jual[]" class="form-control selectBarang">
+                                            <option>{{ $row->harga_jual }}</option>
+                                        </select>
+                                    </td>
+                                    <td style="padding-left: 9px;padding-right:9px; max-width:70px">
+                                        <input readonly value="{{ $row->qty }}" onkeypress='validate(event)' name="qty[]" type="text" class="form-control qty" style="padding: 10px">
+                                    </td>
+                                    <td class="satuan">{{ $row->barang->satuan != null ? $row->barang->satuan->nama_satuan : $row->barang->kode_satuan }}</td>
+                                    <td>%disc</td>
+                                    <td>rpdisc</td>
+                                    <td class="jumlah">{{ number_format($row->harga_jual * $row->qty) }}</td>
+                                    <td ><a class="btn btn-xs delete-record" data-id="{{ $loop->iteration }}"><i class="fas fa-trash"></i></a></td>
+                                </tr>
+                            @endforeach
+                            {{-- <tr class="tb-info">
                                 <td class="text-center" colspan="9">Klik tombol tambah untuk melakukan Penjualan</td>
-                            </tr>
+                            </tr> --}}
                         </tbody>
                       </table>
                 </div>
                 <div class="card-footer">
-                    <h3 class="float-left pembayaran text-success" style="margin-right:100px"> </h3>
-                    <h3 class="float-left total" style="margin-right:100px"> </h3>
-                    <h3 class="float-left kembalian text-warning"> </h3>
+                    <h3 class="float-left pembayaran text-success" style="margin-right:100px"> Bayar :  {{ number_format($edit_data_kasir[0]->bayar) }} </h3>
+                    <h3 class="float-left total" style="margin-right:100px"> Total : {{ number_format($total) }} </h3>
+                    <h3 class="float-left kembalian text-warning"> Kembalian:  {{ number_format($edit_data_kasir[0]->bayar - $total) }}</h3>
                     <input type="hidden" name="pembayaran" id="inputPembayaran">
                     <button type="submit" class="btn btn-primary float-right btn-simpan">Simpan</button>
                 </div>
@@ -74,45 +101,8 @@
         </form>
         </div>
     </div>
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="card">
-                <div class="card-header d-flex  justify-content-between">
-                    <h4>Segment penjualan terakhir hari ini</h4>
-                    <div class="table-tools d-flex justify-content-around ">
-                        <img class="preloading" src="{{ asset('img/svg_animated/loading.svg') }}" alt="" width="50" >
-                        <button type="button" class="btn btn-primary btn-print float-right" data-toggle="modal" data-target="#printPreview"><i class="fas fa-print"></i></button>
-                    </div>
-
-                </div>
-                <div class="card-body">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Nama / Kode barang</th>
-                                <th>Qty</th>
-                                <th>Harga Jual</th>
-                                <th>Jumlah</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($segment_penjualan_terakhir_hari_ini as $row)
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $row->barang->nama_barang }}</td>
-                                    <td>{{ $row->qty }}</td>
-                                    <td>{{ "Rp. ".  number_format($row->harga_jual) }}</td>
-                                    <td>{{ "Rp. " . number_format($row->jumlah) }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
 </section>
+
 
 <div id="printSection">
     <table class="table table-striped">
@@ -126,7 +116,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($segment_penjualan_terakhir_hari_ini as $row)
+            @foreach ($edit_data_kasir as $row)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $row->barang->nama_barang }}</td>
@@ -136,69 +126,18 @@
                 </tr>
             @endforeach
             <tr>
-                <td colspan = '4'><div style='text-align:right; color:black'>Total : </div></td><td style='text-align:right; font-size:16pt; color:black'>{{ number_format($segment_penjualan_terakhir_hari_ini->sum('jumlah')) }}</td>
+                <td colspan = '4'><div style='text-align:right; color:black'>Total : </div></td><td style='text-align:right; font-size:16pt; color:black'>{{ number_format($edit_data_kasir->sum('jumlah')) }}</td>
             </tr>
             <tr>
-                <td colspan = '4'><div style='text-align:right; color:black'>Cash : </div></td><td style='text-align:right; font-size:16pt; color:black'>{{ number_format(count($segment_penjualan_terakhir_hari_ini) > 0 ? $segment_penjualan_terakhir_hari_ini[0]->bayar : 0) }}</td>
+                <td colspan = '4'><div style='text-align:right; color:black'>Cash : </div></td><td style='text-align:right; font-size:16pt; color:black'>{{ number_format(count($edit_data_kasir) > 0 ? $edit_data_kasir[0]->bayar : 0) }}</td>
             </tr>
             <tr>
-                <td colspan = '4'><div style='text-align:right; color:black'>Change : </div></td><td style='text-align:right; font-size:16pt; color:black'>{{ number_format((count($segment_penjualan_terakhir_hari_ini) > 0 ? $segment_penjualan_terakhir_hari_ini[0]->bayar : 0) - $segment_penjualan_terakhir_hari_ini->sum('jumlah')) }}</td>
+                <td colspan = '4'><div style='text-align:right; color:black'>Change : </div></td><td style='text-align:right; font-size:16pt; color:black'>{{ number_format((count($edit_data_kasir) > 0 ? $edit_data_kasir[0]->bayar : 0) - $edit_data_kasir->sum('jumlah')) }}</td>
             </tr>
         </tbody>
     </table>
 </div>
 
-
-  <!-- Modal -->
-  <div class="modal fade" id="printPreview" tabindex="-1" aria-labelledby="printPreviewLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Cetak struk</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body d-flex align-self-center justify-content-center">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Nama / Kode barang</th>
-                        <th>Qty</th>
-                        <th>Harga Jual</th>
-                        <th>Jumlah</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($segment_penjualan_terakhir_hari_ini as $row)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $row->barang->nama_barang }}</td>
-                            <td>{{ $row->qty }}</td>
-                            <td>{{ "Rp. ".  number_format($row->harga_jual) }}</td>
-                            <td>{{ "Rp. " . number_format($row->jumlah) }}</td>
-                        </tr>
-                    @endforeach
-                    <tr>
-                        <td colspan = '4'><div style='text-align:right; color:black'>Total : </div></td><td style='text-align:right; font-size:16pt; color:black'>{{ number_format($segment_penjualan_terakhir_hari_ini->sum('jumlah')) }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan = '4'><div style='text-align:right; color:black'>Cash : </div></td><td style='text-align:right; font-size:16pt; color:black'>{{ number_format(count($segment_penjualan_terakhir_hari_ini) > 0 ? $segment_penjualan_terakhir_hari_ini[0]->bayar : 0) }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan = '4'><div style='text-align:right; color:black'>Change : </div></td><td style='text-align:right; font-size:16pt; color:black'>{{ number_format((count($segment_penjualan_terakhir_hari_ini) > 0 ? $segment_penjualan_terakhir_hari_ini[0]->bayar : 0) - $segment_penjualan_terakhir_hari_ini->sum('jumlah')) }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Cetak</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
 
 @endsection
@@ -232,7 +171,7 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
-                , url: '/kasir/save_penjualan_barang'
+                , url: '/kasir/update_penjualan_barang/'
                 , method: 'post'
                 , data: $(this).serialize()
                 // , dataType: 'json'
@@ -248,7 +187,7 @@
                     console.log(err);
                 }
                 , beforeSend: function(){
-                    $('.btn-simpan').prop('disabled', true)
+                    // $('.btn-simpan').prop('disabled', true)
                 }
             })
         })
@@ -335,7 +274,7 @@
                         $('.jumlah').each(function(){
                             total += parseFloat($(this).text().split(",").join(""), 10) || 0;
                         })
-                        $('.total').html("TOTAL : " + addCommas(total))
+                        $('.total').html("Total : " + addCommas(total))
                     }, 500);
 
                     let hargaHTML = '<select class="form-control selectHarga harga_jual" name="harga_jual[]">';
@@ -359,7 +298,7 @@
                                         $('.jumlah').each(function(){
                                             total += parseFloat($(this).text().split(",").join(""), 10) || 0;
                                         })
-                                        $('.total').html("TOTAL : " + addCommas(total))
+                                        $('.total').html("Total : " + addCommas(total))
                                     }, 500);
                                     element.find('.jumlah').html(addCommas(parseInt(element.find('.qty').val()) * parseInt($(this).val())));
                                 })
@@ -370,7 +309,7 @@
                                 $('.jumlah').each(function(){
                                     total += parseFloat($(this).text().split(",").join(""), 10) || 0;
                                 })
-                                $('.total').html("TOTAL : " + addCommas(total))
+                                $('.total').html("Total : " + addCommas(total))
                             }, 500);
                         })
                     // element.find('.harga').html(addCommas($(this).val().split(",")[1]))
@@ -385,7 +324,7 @@
                         $('.jumlah').each(function(){
                             total += parseFloat($(this).text().split(",").join(""), 10) || 0;
                         })
-                        $('.total').html("TOTAL : " + addCommas(total))
+                        $('.total').html("Total : " + addCommas(total))
                     }, 500);
                     element.find('.jumlah').html(addCommas(parseInt(element.find('.harga_jual').val()) * parseInt($(this).val())));
                 })
@@ -404,12 +343,13 @@
                 $('.jumlah').each(function(){
                     total += parseFloat($(this).text().split(",").join(""), 10) || 0;
                 })
-                $('.total').html("TOTAL : " + addCommas(total))
+                $('.total').html("Total : " + addCommas(total))
             }, 500);
             var didConfirm = confirm("Are you sure You want to delete");
             if (didConfirm == true) {
             var id = $(this).attr('data-id');
             var targetDiv = $(this).attr('targetDiv');
+            console.log(id);
             $('#rec-' + id).remove();
             if($('#tbl_posts_body').find('tr').length < 2){
                 $('.tb-info').show();
