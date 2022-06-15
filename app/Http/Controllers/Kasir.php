@@ -60,25 +60,42 @@ class Kasir extends Controller
             $qty = $request->qty;
             $kodeBarang = $request->kode_barang;
             $hargaJual = $request->harga_jual;
+            $rpdisc = $request->rpdisc;
 
             $dataPenjualan = [];
             for ($count = 0; $count < count($kodeBarang); $count++) {
                 $data = [
                     'qty' => $qty[$count + 1],
                     'kode_barang' => $kodeBarang[$count],
-                    'harga_jual' => $hargaJual[$count]
+                    'harga_jual' => $hargaJual[$count],
+                    'rpdisc' => $rpdisc[$count + 1],
                 ];
                 $dataPenjualan[] = $data;
             }
 
+
+
+
             foreach ($dataPenjualan as $row) {
                 $kodeBarang = explode(",", $row['kode_barang'])[0];
+                $statusBarang = explode(",", $row['kode_barang'])[7];
+
                 $qty = $row['qty'];
                 $hargaJual = $row['harga_jual'];
                 $penjualan = Penjualan::where([
                     'tgl_penjualan' => $request->tgl,
                     'segment' => $request->segment
                 ]);
+
+                // update stok
+                // $barang = Barang::where([
+                //     ['kode_barang', '=', $kodeBarang]
+                // ]);
+
+                // $stokAkhir = $barang->first()->stok_akhir;
+                // $barang->update([
+                //     'stok_akhir' => $stokAkhir + $qty
+                // ]);
 
                 $penjualan->delete();
 
@@ -96,31 +113,39 @@ class Kasir extends Controller
             foreach ($dataPenjualan as $row) {
                 $kodeBarang = explode(",", $row['kode_barang'])[0];
                 $qty = $row['qty'];
+                $rpdisc = $row['rpdisc'];
                 $hargaJual = $row['harga_jual'];
                 $penjualan = Penjualan::where([
                     'tgl_penjualan' => $request->tgl,
                     'segment' => $request->segment
                 ]);
 
+
                 Penjualan::create([
                     'kode_barang' => $kodeBarang,
                     'tgl_penjualan' => $request->tgl,
                     'qty' => $qty,
                     'harga_jual' => $hargaJual,
+                    'rpdisc' => $rpdisc,
                     'bayar' => $request->pembayaran == null ? 0 : $request->pembayaran,
                     'jumlah' => $hargaJual * $qty,
                     'segment' => $request->segment
                 ]);
 
-                // // update stok
-                // $barang = Barang::where([
-                //     ['kode_barang', '=', $kodeBarang]
-                // ]);
 
-                // $stokAkhir = $barang->first()->stok_akhir;
-                // $barang->update([
-                //     'stok_akhir' => $stokAkhir - $qty
-                // ]);
+                $statusBarang = explode(",", $row['kode_barang'])[7];
+
+                if ($statusBarang == 'baru') {
+                    // update stok
+                    $barang = Barang::where([
+                        ['kode_barang', '=', $kodeBarang]
+                    ]);
+
+                    $stokAkhir = $barang->first()->stok_akhir;
+                    $barang->update([
+                        'stok_akhir' => $stokAkhir - $qty
+                    ]);
+                }
             }
 
 
@@ -143,13 +168,15 @@ class Kasir extends Controller
             $qty = $request->qty;
             $kodeBarang = $request->kode_barang;
             $hargaJual = $request->harga_jual;
+            $rpdisc = $request->rpdisc;
 
             $dataPenjualan = [];
             for ($count = 0; $count < count($kodeBarang); $count++) {
                 $data = [
                     'qty' => $qty[$count + 1],
                     'kode_barang' => $kodeBarang[$count],
-                    'harga_jual' => $hargaJual[$count]
+                    'harga_jual' => $hargaJual[$count],
+                    'rpdisc' => $rpdisc[$count + 1]
                 ];
                 $dataPenjualan[] = $data;
             }
@@ -158,11 +185,13 @@ class Kasir extends Controller
                 $kodeBarang = explode(",", $row['kode_barang'])[0];
                 $qty = $row['qty'];
                 $hargaJual = $row['harga_jual'];
+                $rpdisc = $row['rpdisc'];
                 Penjualan::create([
                     'kode_barang' => $kodeBarang,
                     'tgl_penjualan' => now(),
                     'qty' => $qty,
                     'harga_jual' => $hargaJual,
+                    'rpdisc' => $rpdisc,
                     'bayar' => $request->pembayaran == null ? 0 : $request->pembayaran,
                     'jumlah' => $hargaJual * $qty,
                     'segment' => $segment

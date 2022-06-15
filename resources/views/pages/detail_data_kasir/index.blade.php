@@ -7,6 +7,7 @@
             <div class="card">
                 <div class="card-header">
                     <h4>detail kasir pada {{ $tgl }} segment {{ $segment }}</h4>
+                    <a href="{{ URL::to('/kasir/data_kasir/edit/' . $tgl . '/' . $segment) }}" class="btn btn-primary">Edit</a>
                 </div>
                 <div class="card-body">
                     <table class="table table-striped">

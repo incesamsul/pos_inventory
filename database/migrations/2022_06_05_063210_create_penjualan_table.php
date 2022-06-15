@@ -19,6 +19,7 @@ class CreatePenjualanTable extends Migration
             $table->date('tgl_penjualan');
             $table->integer('harga_jual');
             $table->integer('qty');
+            $table->integer('rpdisc');
             $table->integer('bayar');
             $table->integer('jumlah');
             $table->string('segment');

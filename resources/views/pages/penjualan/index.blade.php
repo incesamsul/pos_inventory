@@ -36,7 +36,9 @@
                             </td>
                             <td class="satuan">satuan</td>
                             <td>%disc</td>
-                            <td>rpdisc</td>
+                            <td style="padding-left: 9px;padding-right:9px; max-width:70px">
+                                <input value="0" onkeypress='validate(event)' name="rpdisc[]" type="text" class="form-control rpdisc" style="padding: 10px">
+                            </td>
                             <td class="jumlah">--</td>
                             <td ><a class="btn btn-xs delete-record" data-id="0"><i class="fas fa-trash"></i></a></td>
                             </tr>
@@ -92,6 +94,7 @@
                                 <th>#</th>
                                 <th>Nama / Kode barang</th>
                                 <th>Qty</th>
+                                <th>Rpdisc</th>
                                 <th>Harga Jual</th>
                                 <th>Jumlah</th>
                             </tr>
@@ -102,6 +105,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $row->barang->nama_barang }}</td>
                                     <td>{{ $row->qty }}</td>
+                                    <td>{{ "Rp. " . number_format($row->rpdisc) }}</td>
                                     <td>{{ "Rp. ".  number_format($row->harga_jual) }}</td>
                                     <td>{{ "Rp. " . number_format($row->jumlah) }}</td>
                                 </tr>
@@ -115,8 +119,9 @@
 </section>
 
 <div id="printSection">
-    <table class="table table-striped">
-        <thead>
+    {{-- <table class="table table-bordered"> --}}
+        <table cellspacing='0' cellpadding='0' style='width:100%; color:black; font-size:85px !important; font-family:'Bahnschrift SemiBold SemiConden';  border-collapse: collapse;' border='0'>
+        {{-- <thead>
             <tr>
                 <th>#</th>
                 <th>Nama / Kode barang</th>
@@ -124,25 +129,48 @@
                 <th>Harga Jual</th>
                 <th>Jumlah</th>
             </tr>
-        </thead>
+        </thead> --}}
         <tbody>
+            <tr>
+                <td colspan="3" class="text-center">
+                    <span class="text-center">TOKO SMART</span><br>
+                    <span class="text-center">JL. TERMINAL BARU - MAPPASAILE</span><br>
+                    <span class="text-center">PANGKAJENE - PANGKEP</span><br>
+                    <span class="text-center">{{ date('d/m/Y H:s') }}</span><br>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="text-align:center;">========================</td>
+            </tr>
+            <tr>
+                <td colspan="3" style="border-bottom: 1px dashed black"></td>
+            </tr>
             @foreach ($segment_penjualan_terakhir_hari_ini as $row)
                 <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $row->barang->nama_barang }}</td>
-                    <td>{{ $row->qty }}</td>
-                    <td>{{ "Rp. ".  number_format($row->harga_jual) }}</td>
-                    <td>{{ "Rp. " . number_format($row->jumlah) }}</td>
+                    {{-- <td>{{ $loop->iteration }}</td> --}}
+                    <td colspan="3">{{ $row->barang->nama_barang }}</td>
+                </tr>
+                <tr>
+                    <td class="text-left">{{ $row->qty }} x </td>
+                    <td class="text-left">{{ number_format($row->harga_jual) }}</td>
+                    <td class="text-left"> = {{ number_format($row->jumlah) }}</td>
+                </tr>
                 </tr>
             @endforeach
             <tr>
-                <td colspan = '4'><div style='text-align:right; color:black'>Total : </div></td><td style='text-align:right; font-size:16pt; color:black'>{{ number_format($segment_penjualan_terakhir_hari_ini->sum('jumlah')) }}</td>
+                <td colspan="3" style="text-align:center;">========================</td>
             </tr>
             <tr>
-                <td colspan = '4'><div style='text-align:right; color:black'>Cash : </div></td><td style='text-align:right; font-size:16pt; color:black'>{{ number_format(count($segment_penjualan_terakhir_hari_ini) > 0 ? $segment_penjualan_terakhir_hari_ini[0]->bayar : 0) }}</td>
+                <td colspan = '2'><div style='text-align:left; color:black'>Total : </div></td><td style='text-align:left; font-size:90px; color:black'>  {{ number_format($segment_penjualan_terakhir_hari_ini->sum('jumlah')) }}</td>
             </tr>
             <tr>
-                <td colspan = '4'><div style='text-align:right; color:black'>Change : </div></td><td style='text-align:right; font-size:16pt; color:black'>{{ number_format((count($segment_penjualan_terakhir_hari_ini) > 0 ? $segment_penjualan_terakhir_hari_ini[0]->bayar : 0) - $segment_penjualan_terakhir_hari_ini->sum('jumlah')) }}</td>
+                <td colspan = '2'><div style='text-align:left; color:black'>Bayar : </div></td><td style='text-align:left; font-size:90px; color:black'>  {{ number_format(count($segment_penjualan_terakhir_hari_ini) > 0 ? $segment_penjualan_terakhir_hari_ini[0]->bayar : 0) }}</td>
+            </tr>
+            <tr>
+                <td colspan = '2'><div style='text-align:left; color:black'>Kembalian : </div></td><td style='text-align:left; font-size:90px; color:black'>  {{ number_format((count($segment_penjualan_terakhir_hari_ini) > 0 ? $segment_penjualan_terakhir_hari_ini[0]->bayar : 0) - $segment_penjualan_terakhir_hari_ini->sum('jumlah')) }}</td>
+            </tr>
+            <tr>
+                <td colspan="3" style="text-align:center;">Terima kasih atas kunjugannya</td>
             </tr>
         </tbody>
     </table>
@@ -361,10 +389,10 @@
                                         })
                                         $('.total').html("TOTAL : " + addCommas(total))
                                     }, 500);
-                                    element.find('.jumlah').html(addCommas(parseInt(element.find('.qty').val()) * parseInt($(this).val())));
+                                    element.find('.jumlah').html(addCommas(parseInt(element.find('.qty').val()) * parseInt($(this).val()) - parseInt(element.find('.rpdisc').val())));
                                 })
                             }
-                            element.find('.jumlah').html(addCommas(parseInt(element.find('.qty').val()) * parseInt($(this).val())));
+                            element.find('.jumlah').html(addCommas(parseInt(element.find('.qty').val()) * parseInt($(this).val() ) - parseInt(element.find('.rpdisc').val())));
                             let total = 0;
                             setTimeout(() => {
                                 $('.jumlah').each(function(){
@@ -375,7 +403,7 @@
                         })
                     // element.find('.harga').html(addCommas($(this).val().split(",")[1]))
                     element.find('.satuan').html($(this).val().split(",")[6])
-                    element.find('.jumlah').html(addCommas(parseInt(element.find('.qty').val()) * parseInt($(this).val().split(",")[1])));
+                    element.find('.jumlah').html(addCommas(parseInt(element.find('.qty').val()) * parseInt($(this).val().split(",")[1]) - parseInt(element.find('.rpdisc').val()) ));
 
                 });
 
@@ -387,7 +415,18 @@
                         })
                         $('.total').html("TOTAL : " + addCommas(total))
                     }, 500);
-                    element.find('.jumlah').html(addCommas(parseInt(element.find('.harga_jual').val()) * parseInt($(this).val())));
+                    element.find('.jumlah').html(addCommas(parseInt(element.find('.harga_jual').val()) * parseInt($(this).val()) - parseInt(element.find('.rpdisc').val()) ));
+                })
+
+                element.find('.rpdisc').on('keyup',function(){
+                    let total = 0;
+                    setTimeout(() => {
+                        $('.jumlah').each(function(){
+                            total += parseFloat($(this).text().split(",").join(""), 10) || 0;
+                        })
+                        $('.total').html("TOTAL : " + addCommas(total))
+                    }, 500);
+                    element.find('.jumlah').html(addCommas(parseInt(element.find('.harga_jual').val()) * parseInt(element.find('.qty').val()) - parseInt($(this).val())));
                 })
             })
 
