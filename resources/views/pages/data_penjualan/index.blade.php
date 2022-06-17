@@ -5,8 +5,15 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
-                <div class="card-header">
-                    <h4>Data penjualan per {{ date('Y-m-d') }}</h4>
+                <div class="card-header d-flex justify-content-between">
+                    <div class="left d-flex flex-row ">
+                        <h4 class="text-nowrap">Data penjualan per </h4>
+                        <input type="date" value="{{ $tgl }}" id="input-filter-tgl" class="form-control">
+                        <button class="btn btn-primary mx-2 filter-tgl"><i class="fas fa-sync"></i></button>
+                    </div>
+                    <a href="{{ URL::to('/kasir/cetak_data_penjualan/' . $tgl) }}" target="_blank" class="btn btn-primary mt-3">
+                        <i class="fas fa-print"></i> Cetak
+                    </a>
                 </div>
                 <div class="card-body">
                     <table class="table table-striped">
@@ -20,15 +27,23 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($segment_penjualan_terakhir_hari_ini as $row)
+                            <?php
+                                $total = 0;
+                                ?>
+                            @foreach ($data_penjualan as $row)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $row->barang->nama_barang }}</td>
                                     <td>{{ $row->qty }}</td>
                                     <td>{{ "Rp. ".  number_format($row->barang->harga_jual_1) }}</td>
                                     <td>{{ "Rp. " . number_format($row->jumlah) }}</td>
+                                    <?php $total += $row->jumlah ?>
                                 </tr>
                             @endforeach
+                                <tr>
+                                    <th class="text-center" colspan="4">TOTAL</th>
+                                    <th>{{ 'Rp. '. number_format($total) }}</th>
+                                </tr>
                         </tbody>
                     </table>
                 </div>
@@ -41,6 +56,11 @@
 @section('script')
 <script>
     $(document).ready(function() {
+
+
+        $('.filter-tgl').on('click',function(){
+            document.location.href = '/kasir/data_penjualan/' + $('#input-filter-tgl').val();
+        })
 
         $('#formPenyesuaian').on('submit',function(e){
             e.preventDefault();

@@ -15,6 +15,7 @@ class CreatePenjualanTable extends Migration
     {
         Schema::create('penjualan', function (Blueprint $table) {
             $table->increments('id_penjualan');
+            $table->unsignedBigInteger('id_kasir');
             $table->string('kode_barang', 50);
             $table->date('tgl_penjualan');
             $table->integer('harga_jual');
@@ -25,6 +26,7 @@ class CreatePenjualanTable extends Migration
             $table->string('segment');
             $table->timestamps();
             $table->foreign('kode_barang')->references('kode_barang')->on('barang')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('id_kasir')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

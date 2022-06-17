@@ -24,9 +24,13 @@ class CreateBarangTable extends Migration
             $table->integer('modal');
             $table->integer('harga_jual_1');
             $table->integer('harga_jual_2');
+            $table->integer('batas_volume_harga_jual_2');
             $table->integer('harga_jual_3');
+            $table->integer('batas_volume_harga_jual_3');
             $table->integer('harga_jual_4');
+            $table->integer('batas_volume_harga_jual_4');
             $table->integer('harga_jual_5');
+            $table->integer('batas_volume_harga_jual_5');
             $table->integer('stok_akhir');
             $table->integer('hpp');
             $table->timestamps();

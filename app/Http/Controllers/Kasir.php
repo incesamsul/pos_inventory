@@ -7,6 +7,7 @@ use App\Models\Penjualan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Filesystem\Filesystem;
+use Dompdf\Dompdf;
 
 
 class Kasir extends Controller
@@ -16,7 +17,7 @@ class Kasir extends Controller
     {
         $segmentPenjualanPerHari = Penjualan::select('segment', 'tgl_penjualan')->latest()->first();
         $segment = $segmentPenjualanPerHari == null ? 0 : $segmentPenjualanPerHari->segment;
-        $data['segment_penjualan_terakhir_hari_ini'] = Penjualan::where('tgl_penjualan', Date('Y-m-d'))->where('segment', $segment)->get();
+        $data['segment_penjualan_terakhir_hari_ini'] = Penjualan::where('tgl_penjualan', Date('Y-m-d'))->where('segment', $segment)->where('id_kasir', auth()->user()->id)->get();
         return view('pages.penjualan.index', $data);
     }
 
@@ -42,12 +43,43 @@ class Kasir extends Controller
         return view('pages.edit_data_kasir.index', $data);
     }
 
-    public function dataPenjualan()
+    public function dataPenjualan($tgl = null)
     {
+        if (!$tgl) {
+            $tgl = Date('Y-m-d');
+        }
         $segmentPenjualanPerHari = Penjualan::select('segment', 'tgl_penjualan')->latest()->first();
         $segment = $segmentPenjualanPerHari->segment;
-        $data['segment_penjualan_terakhir_hari_ini'] = Penjualan::where('tgl_penjualan', Date('Y-m-d'))->get();
+        $data['tgl'] = $tgl;
+        $data['data_penjualan'] = Penjualan::where('tgl_penjualan', $tgl)->get();
         return view('pages.data_penjualan.index', $data);
+    }
+
+    public function cetakDataPenjualan($tgl = null)
+    {
+        if (!$tgl) {
+            $tgl = Date('Y-m-d');
+        }
+        $segmentPenjualanPerHari = Penjualan::select('segment', 'tgl_penjualan')->latest()->first();
+        $segment = $segmentPenjualanPerHari->segment;
+        $data['tgl'] = $tgl;
+        $data['data_penjualan'] = Penjualan::where('tgl_penjualan', $tgl)->get();
+        $html = view('pages.cetak.cetak_data_penjualan', $data);
+
+        // instantiate and use the dompdf class
+        $dompdf = new Dompdf();
+
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation
+        $dompdf->setPaper('Legal', 'potrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser
+        $dompdf->stream("dompdf_out.pdf", array("Attachment" => false));
+        exit(0);
     }
 
     public function updatePenjualanBarang(Request $request)
@@ -187,6 +219,7 @@ class Kasir extends Controller
                 $hargaJual = $row['harga_jual'];
                 $rpdisc = $row['rpdisc'];
                 Penjualan::create([
+                    'id_kasir' => auth()->user()->id,
                     'kode_barang' => $kodeBarang,
                     'tgl_penjualan' => now(),
                     'qty' => $qty,
