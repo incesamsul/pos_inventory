@@ -9,7 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Filesystem\Filesystem;
 use Dompdf\Dompdf;
-
+use Illuminate\Support\Facades\DB;
 
 class Kasir extends Controller
 {
@@ -30,9 +30,13 @@ class Kasir extends Controller
         return view('pages.retur.index', $data);
     }
 
-    public function dataKasir()
+    public function dataKasir($tgl = null)
     {
-        $data['data_kasir'] = Penjualan::where('tgl_penjualan', Date('Y-m-d'))->groupBy('segment')->get();
+        if (!$tgl) {
+            $tgl = Date('Y-m-d');
+        }
+        $data['tgl'] = $tgl;
+        $data['data_kasir'] = DB::table('penjualan')->selectRaw('*, sum(jumlah) as total')->where('tgl_penjualan', $tgl)->groupBy('segment')->get();
         return view('pages.data_kasir.index', $data);
     }
 

@@ -6,7 +6,11 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <h4>Data kasir per {{ date('Y-m-d') }}</h4>
+                    <div class="left d-flex flex-row ">
+                        <h4 class="text-nowrap">Data kasir per </h4>
+                        <input type="date" value="{{ $tgl }}" id="input-filter-tgl" class="form-control">
+                        <button class="btn btn-primary mx-2 filter-tgl"><i class="fas fa-sync"></i></button>
+                    </div>
                 </div>
                 <div class="card-body">
                     <table class="table table-striped" id="table-data">
@@ -14,6 +18,8 @@
                             <tr>
                                 {{-- <th>#</th> --}}
                                 <th>Segment</th>
+                                <th>tgl penjualan</th>
+                                <th>total</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -22,6 +28,8 @@
                                 <tr>
                                     {{-- <td>{{ $loop->iteration }}</td> --}}
                                     <td>{{ $row->segment }}</td>
+                                    <td>{{ $row->tgl_penjualan }}</td>
+                                    <td> Rp. {{ number_format($row->total) }}</td>
                                     <td>
                                         <a class="btn btn-primary" href="{{ URL::to('/kasir/data_kasir/detail/' . $row->tgl_penjualan. '/' . $row->segment) }}">Lihat detail</a>
                                     </td>
@@ -39,6 +47,11 @@
 @section('script')
 <script>
     $(document).ready(function() {
+
+
+        $('.filter-tgl').on('click',function(){
+            document.location.href = '/kasir/data_kasir/' + $('#input-filter-tgl').val();
+        })
 
         $('#formPenyesuaian').on('submit',function(e){
             e.preventDefault();

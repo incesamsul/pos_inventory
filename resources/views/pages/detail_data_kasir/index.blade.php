@@ -26,6 +26,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <?php $total = 0; ?>
                             @foreach ($detail_data_kasir as $row)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
@@ -34,7 +35,12 @@
                                     <td>{{ "Rp. ".  number_format($row->barang->harga_jual_1) }}</td>
                                     <td>{{ "Rp. " . number_format($row->jumlah) }}</td>
                                 </tr>
+                                <?php $total += $row->jumlah ?>
                             @endforeach
+                                <tr>
+                                    <th class="text-center" colspan="4">TOTAL</th>
+                                    <th> Rp. {{ number_format($total) }}</th>
+                                </tr>
                         </tbody>
                     </table>
                 </div>

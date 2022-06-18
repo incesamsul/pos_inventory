@@ -109,6 +109,7 @@ Route::group(['middleware' => ['auth', 'ceklevel:kasir']], function () {
         Route::get('/penjualan', [Kasir::class, 'penjualan']);
         Route::get('/retur', [Kasir::class, 'retur']);
         Route::get('/data_kasir', [Kasir::class, 'dataKasir']);
+        Route::get('/data_kasir/{tgl}', [Kasir::class, 'dataKasir']);
         Route::get('/data_kasir/detail/{tgl}/{segment}', [Kasir::class, 'detailDataKasir']);
         Route::get('/data_kasir/edit/{tgl}/{segment}', [Kasir::class, 'editDataKasir']);
         Route::get('/data_penjualan', [Kasir::class, 'dataPenjualan']);
