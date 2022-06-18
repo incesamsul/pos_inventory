@@ -53,6 +53,7 @@
             <li class="menu-header">Kasir</li>
 
             <li class="" id="liPenjualan"><a class="nav-link" href="{{ URL::to('/kasir/penjualan') }}"><i class="fas fa-cart-plus"></i><span>Penjualan</span></a></li>
+            <li class="" id="liRetur"><a class="nav-link" href="{{ URL::to('/kasir/retur') }}"><i class="fas fa-cart-arrow-down"></i><span>Retur</span></a></li>
             <li class="" id="liDataPenjualan"><a class="nav-link" href="{{ URL::to('/kasir/data_penjualan') }}"><i
                 class="fas fa-tape"></i><span>Data Penjualan</span></a></li>
             <li class="" id="liDataKasir"><a class="nav-link" href="{{ URL::to('/kasir/data_kasir') }}"><i

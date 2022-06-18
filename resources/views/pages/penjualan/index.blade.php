@@ -346,7 +346,7 @@
                 option += '<option value="">-- pilih barang --</option>';
                 for (i in data) {
                     let satuan = data[i].satuan !== null ? data[i].satuan.nama_satuan : data[i].kode_satuan;
-                    option += '<option value="' + data[i].kode_barang + "," + data[i].harga_jual_1 + "," + data[i].harga_jual_2 + "," + data[i].harga_jual_3 + "," + data[i].harga_jual_4 + "," + data[i].harga_jual_5 + "," + satuan  + '">' + data[i].nama_barang + " " + data[i].barcode +'</option>';
+                    option += '<option value="' + data[i].kode_barang + "," + data[i].harga_jual_1 + "," + data[i].harga_jual_2 + "," + data[i].harga_jual_3 + "," + data[i].harga_jual_4 + "," + data[i].harga_jual_5 + "," + satuan  + "," + data[i].batas_volume_harga_jual_2  +"," + data[i].batas_volume_harga_jual_3  + "," + data[i].batas_volume_harga_jual_4  + "," + data[i].batas_volume_harga_jual_5  +'">' + data[i].nama_barang + " " + data[i].barcode +'</option>';
                 }
                 element.find('.selectBarang').select2({
                     width: 'element'
@@ -408,6 +408,48 @@
                 });
 
                 element.find('.qty').on('keyup',function(){
+                    // batas volume 2 : index ke 7
+                    if($(this).val() >= parseInt(element.find('.selectBarang').val().split(",")[7]) &&  $(this).val() < parseInt(element.find('.selectBarang').val().split(",")[8])){
+                        // melebihi batas volume 2
+                        element.find('.harga_jual option:eq(1)').prop("selected", true);
+                        element.find('.harga_jual option:eq(2)').prop("selected", false);
+                        element.find('.harga_jual option:eq(3)').prop("selected", false);
+                        element.find('.harga_jual option:eq(4)').prop("selected", false);
+                    } else if($(this).val() >= parseInt(element.find('.selectBarang').val().split(",")[8]) && $(this).val() < parseInt(element.find('.selectBarang').val().split(",")[9]) ){
+                        // melebihi batas volume 3
+                        element.find('.harga_jual option:eq(1)').prop("selected", false);
+                        element.find('.harga_jual option:eq(2)').prop("selected", true);
+                        element.find('.harga_jual option:eq(3)').prop("selected", false);
+                        element.find('.harga_jual option:eq(4)').prop("selected", false);
+                    } else if($(this).val() >= parseInt(element.find('.selectBarang').val().split(",")[9]) && $(this).val() < parseInt(element.find('.selectBarang').val().split(",")[10])){
+                        // mebelihi batas volume 4
+                        element.find('.harga_jual option:eq(1)').prop("selected", false);
+                        element.find('.harga_jual option:eq(2)').prop("selected", false);
+                        element.find('.harga_jual option:eq(3)').prop("selected", true);
+                        element.find('.harga_jual option:eq(4)').prop("selected", false);
+                    } else if($(this).val() >= parseInt(element.find('.selectBarang').val().split(",")[10])){
+                        // melebihi batas volume 5
+                        element.find('.harga_jual option:eq(1)').prop("selected", false);
+                        element.find('.harga_jual option:eq(2)').prop("selected", false);
+                        element.find('.harga_jual option:eq(3)').prop("selected", false);
+                        element.find('.harga_jual option:eq(4)').prop("selected", true);
+                    } else {
+                        // kembali ke awal
+                        element.find('.harga_jual option:eq(0)').prop("selected", true);
+                        element.find('.harga_jual option:eq(1)').prop("selected", false);
+                        element.find('.harga_jual option:eq(2)').prop("selected", false);
+                        element.find('.harga_jual option:eq(3)').prop("selected", false);
+                        element.find('.harga_jual option:eq(4)').prop("selected", false);
+                    }
+
+                    if(parseInt(element.find('.selectBarang').val().split(",")[7]) == 0){
+                        element.find('.harga_jual option:eq(0)').prop("selected", true);
+                        element.find('.harga_jual option:eq(1)').prop("selected", false);
+                        element.find('.harga_jual option:eq(2)').prop("selected", false);
+                        element.find('.harga_jual option:eq(3)').prop("selected", false);
+                        element.find('.harga_jual option:eq(4)').prop("selected", false);
+                    }
+                    
                     let total = 0;
                     setTimeout(() => {
                         $('.jumlah').each(function(){

@@ -28,7 +28,7 @@
                         </thead>
                         <tbody>
                             <?php
-                                $total = 0;
+                                $totalPenjualan = 0;
                                 ?>
                             @foreach ($data_penjualan as $row)
                                 <tr>
@@ -37,12 +37,12 @@
                                     <td>{{ $row->qty }}</td>
                                     <td>{{ "Rp. ".  number_format($row->barang->harga_jual_1) }}</td>
                                     <td>{{ "Rp. " . number_format($row->jumlah) }}</td>
-                                    <?php $total += $row->jumlah ?>
+                                    <?php $totalPenjualan += $row->jumlah ?>
                                 </tr>
                             @endforeach
                                 <tr>
                                     <th class="text-center" colspan="4">TOTAL</th>
-                                    <th>{{ 'Rp. '. number_format($total) }}</th>
+                                    <th>{{ 'Rp. '. number_format($totalPenjualan) }}</th>
                                 </tr>
                         </tbody>
                     </table>
@@ -50,7 +50,124 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h4 class="text-nowrap">Data retur  </h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nama / Kode barang</th>
+                                <th>Qty</th>
+                                <th>Harga barang</th>
+                                <th>Jumlah</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                                $totalRetur = 0;
+                                ?>
+                            @foreach ($retur as $row)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $row->barang->nama_barang }}</td>
+                                    <td>{{ $row->qty }}</td>
+                                    <td>{{ "Rp. ".  number_format($row->barang->harga_jual_1) }}</td>
+                                    <td>{{ "Rp. " . number_format($row->jumlah) }}</td>
+                                    <?php $totalRetur += $row->jumlah ?>
+                                </tr>
+                            @endforeach
+                                <tr>
+                                    <th class="text-center" colspan="4">TOTAL</th>
+                                    <th>{{ 'Rp. '. number_format($totalRetur) }}</th>
+                                </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h4 class="text-nowrap">Rekap data penjualan per {{ $tgl }}  </h4>
+                </div>
+                <div class="card-body">
+                    <h4> Rp. {{ number_format($totalPenjualan - $totalRetur) }} TTOTAL TUNAI</h4>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
+
+
+
+<div id="printSection">
+    {{-- <table class="table table-bordered"> --}}
+        <table cellspacing='0' cellpadding='0' style="width:100%; color:black; font-size:85px !important; font-family:'Bahnschrift SemiBold SemiConden';  border-collapse: collapse;" border='0'>
+        {{-- <thead>
+            <tr>
+                <th>#</th>
+                <th>Nama / Kode barang</th>
+                <th>Qty</th>
+                <th>Harga Jual</th>
+                <th>Jumlah</th>
+            </tr>
+        </thead> --}}
+        <tbody>
+            <tr>
+                <td colspan="3" class="text-center">
+                    <span class="text-center">TOKO SMART</span><br>
+                    <span class="text-center">JL. TERMINAL BARU - MAPPASAILE</span><br>
+                    <span class="text-center">PANGKAJENE - PANGKEP</span><br>
+                    <span class="text-center">{{ date('d/m/Y H:s') }}</span><br>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="text-align:center;">========================</td>
+            </tr>
+            <tr>
+                <td colspan="3" style="border-bottom: 1px dashed black"></td>
+            </tr>
+            @foreach ($data_penjualan as $row)
+
+            @endforeach
+
+            <tr>
+                <td colspan = '2'><div style='text-align:left; color:black'>Total penjualan : </div></td><td style='text-align:left; font-size:90px; color:black'>  {{ number_format($totalPenjualan) }}</td>
+            </tr>
+            <tr>
+                <td colspan = '2'><div style='text-align:left; color:black'>Total Retur : </div></td><td style='text-align:left; font-size:90px; color:black'>  {{ number_format($totalRetur) }}</td>
+            </tr>
+            <tr>
+                <td colspan = '2'><div style='text-align:left; color:black'>Total Tunai : </div></td><td style='text-align:left; font-size:90px; color:black'>  {{ number_format($totalPenjualan - $totalRetur) }}</td>
+            </tr>
+            <tr>
+                <td colspan="3" style="text-align:center;">========================</td>
+            </tr>
+            <tr>
+                <td colspan = '2'><div style='text-align:left; color:black'>Dibuat Oleh,  </div></td><td style='text-align:left; font-size:90px; color:black'>  Mengetahui</td>
+            </tr>
+            <tr>
+                <td><br></td>
+                <td><br></td>
+            </tr>
+            <tr>
+                <td><br></td>
+                <td><br></td>
+            </tr>
+            <tr>
+                <td colspan = '2'><div style='text-align:center; color:black'>(...........)  </div></td><td style='text-align:center; font-size:90px; color:black'>  (...........)</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 @endsection
 @section('script')

@@ -107,6 +107,7 @@ Route::group(['middleware' => ['auth', 'ceklevel:kasir']], function () {
         // GET REQUEST
 
         Route::get('/penjualan', [Kasir::class, 'penjualan']);
+        Route::get('/retur', [Kasir::class, 'retur']);
         Route::get('/data_kasir', [Kasir::class, 'dataKasir']);
         Route::get('/data_kasir/detail/{tgl}/{segment}', [Kasir::class, 'detailDataKasir']);
         Route::get('/data_kasir/edit/{tgl}/{segment}', [Kasir::class, 'editDataKasir']);
@@ -117,8 +118,12 @@ Route::group(['middleware' => ['auth', 'ceklevel:kasir']], function () {
         Route::post('/save_penjualan_barang', [Kasir::class, 'savePenjualanBarang']);
         Route::post('/update_penjualan_barang', [Kasir::class, 'updatePenjualanBarang']);
 
+        Route::post('/save_retur_barang', [Kasir::class, 'saveReturBarang']);
+
         Route::get('/cetak_data_penjualan', [Kasir::class, 'cetakDataPenjualan']);
         Route::get('/cetak_data_penjualan/{tgl}', [Kasir::class, 'cetakDataPenjualan']);
+        Route::get('/cetak_faktur', [Kasir::class, 'cetakFaktur']);
+        Route::get('/cetak_faktur/{tgl}/{segment}', [Kasir::class, 'cetakFaktur']);
     });
 });
 

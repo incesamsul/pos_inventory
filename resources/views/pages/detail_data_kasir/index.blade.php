@@ -5,9 +5,14 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
-                <div class="card-header">
-                    <h4>detail kasir pada {{ $tgl }} segment {{ $segment }}</h4>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div class="left d-flex flex-row float-left">
+                        <h4>detail kasir pada {{ $tgl }} segment {{ $segment }}</h4>
                     <a href="{{ URL::to('/kasir/data_kasir/edit/' . $tgl . '/' . $segment) }}" class="btn btn-primary">Edit</a>
+                    </div>
+                    <a href="{{ URL::to('/kasir/cetak_faktur/' . $tgl . '/'. $segment) }}" target="_blank" class="btn btn-primary mt-3 float-right">
+                        <i class="fas fa-print"></i> Cetak faktur
+                    </a>
                 </div>
                 <div class="card-body">
                     <table class="table table-striped">
