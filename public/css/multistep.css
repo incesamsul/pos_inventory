@@ -163,7 +163,7 @@ select.list-dt:focus {
 #progressbar li {
     list-style-type: none;
     font-size: 12px;
-    width: 25%;
+    width: 20%;
     float: left;
     position: relative;
 }
@@ -184,6 +184,11 @@ select.list-dt:focus {
 #progressbar #harga:before {
     font-family: FontAwesome;
     content: "\f09d";
+}
+
+#progressbar #volume-harga:before {
+    font-family: FontAwesome;
+    content: "\e05b";
 }
 
 #progressbar #confirm:before {

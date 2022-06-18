@@ -75,6 +75,7 @@
                                 <li class="active" id="barang"><strong>Barang</strong></li>
                                 <li id="stok"><strong>Stok</strong></li>
                                 <li id="harga"><strong>Harga</strong></li>
+                                <li id="volume-harga"><strong>Volume</strong></li>
                                 <li id="confirm"><strong>Finish</strong></li>
                             </ul>
                             <!-- fieldsets -->
@@ -91,7 +92,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="tgl_masuk">tgl_masuk</label>
-                                        <input type="date" class="form-control" name="tgl_masuk" id="tgl_masuk">
+                                        <input type="date" class="form-control" name="tgl_masuk" id="tgl_masuk" value="{{ Date('Y-m-d') }}">
                                     </div>
                                     <div class="form-group">
                                         <label for="barcode">barcode</label>
@@ -153,6 +154,29 @@
                                     <div class="form-group">
                                         <label for="harga_pokok_penjualan">harga_pokok_penjualan</label>
                                         <input type="text" class="form-control" name="harga_pokok_penjualan" id="harga_pokok_penjualan">
+                                    </div>
+                                </div>
+                                <input type="button" name="previous" class="previous action-button-previous" value="kembali"/>
+                                <input type="button" name="next" class="next action-button" value="Lanjut"/>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-card p-0 shadow-none">
+                                    <h2 class="fs-title">Volume harga</h2>
+                                    <div class="form-group">
+                                        <label for="batas_volume_harga_jual_2">batas_volume_harga_jual_2</label>
+                                        <input type="text" class="form-control" name="batas_volume_harga_jual_2" id="batas_volume_harga_jual_2">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="batas_volume_harga_jual_3">batas_volume_harga_jual_3</label>
+                                        <input type="text" class="form-control" name="batas_volume_harga_jual_3" id="batas_volume_harga_jual_3">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="batas_volume_harga_jual_4">batas_volume_harga_jual_4</label>
+                                        <input type="text" class="form-control" name="batas_volume_harga_jual_4" id="batas_volume_harga_jual_4">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="batas_volume_harga_jual_5">batas_volume_harga_jual_5</label>
+                                        <input type="text" class="form-control" name="batas_volume_harga_jual_5" id="batas_volume_harga_jual_5">
                                     </div>
                                 </div>
                                 <input type="button" name="previous" class="previous action-button-previous" value="kembali"/>
@@ -275,10 +299,12 @@
         // TOMBOL EDIT USER
         $('.table-user tbody').on('click', 'tr td a.edit', function() {
             let barang = $(this).data('barang');
-            console.log(barang.stok_akhir);
+            console.log(barang.tgl_masuk);
+            $('#barang').addClass('active');
             $('#kode_barang').val(barang.kode_barang);
             $('#nama_barang').val(barang.nama_barang);
             $('#barcode').val(barang.barcode);
+            $('#tgl_masuk').val(barang.tgl_masuk);
             $('#satuan').val(barang.kode_satuan).change();
             $('#stok_akhir').val(barang.stok_akhir);
             $('#harga_jual_1').val(barang.harga_jual_1);
@@ -286,7 +312,11 @@
             $('#harga_jual_3').val(barang.harga_jual_3);
             $('#harga_jual_4').val(barang.harga_jual_4);
             $('#harga_jual_5').val(barang.harga_jual_5);
-            $('#harga_jual').val(barang.modal);
+            $('#batas_volume_harga_jual_2').val(barang.batas_volume_harga_jual_2);
+            $('#batas_volume_harga_jual_3').val(barang.batas_volume_harga_jual_3);
+            $('#batas_volume_harga_jual_4').val(barang.batas_volume_harga_jual_4);
+            $('#batas_volume_harga_jual_5').val(barang.batas_volume_harga_jual_5);
+            $('#harga_beli').val(barang.modal);
             $('#harga_pokok_penjualan').val(barang.hpp);
             $('#stok_minimal').val(barang.stok_minimal);
             $('#msform').attr('action', '/admin/update_pembelian');

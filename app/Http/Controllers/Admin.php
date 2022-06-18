@@ -183,6 +183,10 @@ class Admin extends Controller
                 'harga_jual_3' => $formData['harga_jual_3'],
                 'harga_jual_4' => $formData['harga_jual_4'],
                 'harga_jual_5' => $formData['harga_jual_5'],
+                'batas_volume_harga_jual_2' => $formData['batas_volume_harga_jual_2'],
+                'batas_volume_harga_jual_3' => $formData['batas_volume_harga_jual_3'],
+                'batas_volume_harga_jual_4' => $formData['batas_volume_harga_jual_4'],
+                'batas_volume_harga_jual_5' => $formData['batas_volume_harga_jual_5'],
                 'modal' => $formData['harga_beli'],
                 'hpp' => $formData['harga_pokok_penjualan'],
             ]);
@@ -200,6 +204,10 @@ class Admin extends Controller
                 'harga_jual_3' => $formData['harga_jual_3'],
                 'harga_jual_4' => $formData['harga_jual_4'],
                 'harga_jual_5' => $formData['harga_jual_5'],
+                'batas_volume_harga_jual_2' => $formData['batas_volume_harga_jual_2'],
+                'batas_volume_harga_jual_3' => $formData['batas_volume_harga_jual_3'],
+                'batas_volume_harga_jual_4' => $formData['batas_volume_harga_jual_4'],
+                'batas_volume_harga_jual_5' => $formData['batas_volume_harga_jual_5'],
                 'modal' => $formData['harga_beli'],
                 'hpp' => $formData['harga_pokok_penjualan'],
             ]);
