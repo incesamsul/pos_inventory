@@ -83,7 +83,8 @@
                     <h4>Segment penjualan terakhir hari ini</h4>
                     <div class="table-tools d-flex justify-content-around ">
                         <img class="preloading" src="{{ asset('img/svg_animated/loading.svg') }}" alt="" width="50" >
-                        <button type="button" class="btn btn-primary btn-print float-right" data-toggle="modal" data-target="#printPreview"><i class="fas fa-print"></i></button>
+                        {{-- <button type="button" class="btn btn-primary btn-print float-right" data-toggle="modal" data-target="#printPreview"><i class="fas fa-print"></i></button> --}}
+                        <button type="button" class="btn btn-primary btn-print float-right" onclick="window.print()"><i class="fas fa-print"></i></button>
                     </div>
 
                 </div>
@@ -99,7 +100,7 @@
                                 <th>Jumlah</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="tbody-segment-penjualan-terakhir">
                             @foreach ($segment_penjualan_terakhir_hari_ini as $row)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
@@ -120,7 +121,7 @@
 
 <div id="printSection">
     {{-- <table class="table table-bordered"> --}}
-        <table cellspacing='0' cellpadding='0' style='width:100%; color:black; font-size:85px !important; font-family:'Bahnschrift SemiBold SemiConden';  border-collapse: collapse;' border='0'>
+        <table cellspacing='0' cellpadding='0' style="width:100%; color:black; font-size:85px !important; font-family:'Bahnschrift SemiBold SemiConden';  border-collapse: collapse;" border='0'>
         {{-- <thead>
             <tr>
                 <th>#</th>
@@ -130,7 +131,7 @@
                 <th>Jumlah</th>
             </tr>
         </thead> --}}
-        <tbody>
+        <tbody id="tbody-printSection">
             <tr>
                 <td colspan="3" class="text-center">
                     <span class="text-center">TOKO SMART</span><br>
@@ -232,6 +233,9 @@
 @endsection
 @section('script')
 <script>
+    window.onbeforeunload = function() {
+        return "Dude, are you sure you want to leave? Think of the kittens!";
+    }
     $(document).ready(function() {
 
         // Pembayaran
@@ -268,8 +272,92 @@
                     console.log(data);
                     if(data == 1){
                         Swal.fire('Berhasil', 'Data telah berhasil di sesuaikan', 'success').then((result) => {
-                                    location.reload();
-                                });
+                            // location.reload();
+                            $('#tbl_posts_body').html('<tr class="tb-info"><td class="text-center" colspan="9">Klik tombol tambah untuk melakukan Penjualan</td></tr>');
+                        });
+                        $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                        , url: '/kasir/get_segment_penjualan_terakhir_hari_ini'
+                        , method: 'post'
+                        , dataType: 'json'
+                        , beforeSend: function(){
+                            // element.find('.selectBarang').hide();
+                        }
+                        , complete: function(){
+                            // complete here
+                        }
+                        , success: function(data) {
+                            // callback(data);
+                            let tableHTML = '';
+                            for(i in data){
+                                tableHTML += '<tr>';
+                                tableHTML += '<td>' + (parseInt(i) + 1) + '</td>';
+                                tableHTML += '<td>' + data[i].barang.nama_barang + '</td>';
+                                tableHTML += '<td>' + data[i].qty + '</td>';
+                                tableHTML += '<td>Rp. ' + addCommas(data[i].rpdisc) + '</td>';
+                                tableHTML += '<td>Rp. ' + addCommas(data[i].harga_jual) + '</td>';
+                                tableHTML += '<td>Rp. ' + addCommas(data[i].jumlah) + '</td>';
+                                tableHTML += '</tr>'
+                            }
+                            $('#tbody-segment-penjualan-terakhir').html(tableHTML);
+                            $('#pembayaran').val(0);
+                            $('.pembayaran').html('');
+                            $('.total').html('');
+                            $('.kembalian').html('');
+
+                            let tablePrint = '';
+                                tablePrint += '<tr>';
+                                tablePrint +='<td colspan="3" class="text-center">';
+                                tablePrint += '<span class="text-center">TOKO SMART</span><br>';
+                                tablePrint += '<span class="text-center">JL. TERMINAL BARU - MAPPASAILE</span><br>';
+                                tablePrint += '<span class="text-center">PANGKAJENE - PANGKEP</span><br>';
+                                tablePrint += '<span class="text-center">{{ date('d/m/Y H:s') }}</span><br>';
+                                tablePrint += '</td>';
+                                tablePrint += '</tr>';
+                                tablePrint += '<tr>';
+                                tablePrint += '<td colspan="3" style="text-align:center;">========================</td>';
+                                tablePrint += '</tr>';
+                                tablePrint += '<tr>';
+                                tablePrint += '<td colspan="3" style="border-bottom: 1px dashed black"></td>';
+                                tablePrint += '</tr>';
+                                let total = 0;
+                                for(i in data){
+                                    tablePrint += '<tr>';
+                                    tablePrint += '<td colspan="3">' + data[i].barang.nama_barang + '</td>';
+                                    tablePrint += '</tr>';
+                                    tablePrint += '<tr>';
+                                    tablePrint += '<td class="text-left">' + data[i].qty + ' x </td>';
+                                    tablePrint += '<td class="text-left">' + addCommas(data[i].harga_jual) + '</td>';
+                                    tablePrint += '<td class="text-left"> = ' + addCommas(data[i].jumlah) + '</td>';
+                                    tablePrint += '</tr>';
+                                    total += data[i].jumlah;
+                                }
+
+                                tablePrint += '<tr>';
+                                tablePrint += '<td colspan="3" style="text-align:center;">========================</td>';
+                                tablePrint += '</tr>';
+                                tablePrint += '<tr>';
+                                tablePrint += "<td colspan = '2'><div style='text-align:left; color:black'>Total : </div></td><td style='text-align:left; font-size:90px; color:black'>  " + addCommas(total) + "</td>";
+                                tablePrint += '</tr>';
+                                tablePrint += '<tr>';
+                                tablePrint += "<td colspan = '2'><div style='text-align:left; color:black'>Bayar : </div></td><td style='text-align:left; font-size:90px; color:black'>  " + addCommas(data[0].bayar) + "</td>";
+                                tablePrint += '</tr>';
+                                tablePrint += '<tr>';
+                                tablePrint += "<td colspan = '2'><div style='text-align:left; color:black'>Kembalian : </div></td><td style='text-align:left; font-size:90px; color:black'>  " +  addCommas(data[0].bayar - total) +  "</td>";
+                                tablePrint += '</tr>';
+                                tablePrint += '<tr>';
+                                tablePrint += '<td colspan="3" style="text-align:center;">Terima kasih atas kunjugannya</td>';
+                                tablePrint += '</tr>';
+                                $('#tbody-printSection').html(tablePrint)
+
+                        }
+                        , error: function(err){
+                            console.log(err);
+                        }
+                    });
+
                     }
                 }
                 , error: function(err){
@@ -299,6 +387,7 @@
                 window.open(window.location.href, '_blank');
             }
         };
+
 
 
         function requestAllData(){
@@ -411,28 +500,106 @@
                     // batas volume 2 : index ke 7
                     if($(this).val() >= parseInt(element.find('.selectBarang').val().split(",")[7]) &&  $(this).val() < parseInt(element.find('.selectBarang').val().split(",")[8])){
                         // melebihi batas volume 2
-                        element.find('.harga_jual option:eq(1)').prop("selected", true);
-                        element.find('.harga_jual option:eq(2)').prop("selected", false);
-                        element.find('.harga_jual option:eq(3)').prop("selected", false);
-                        element.find('.harga_jual option:eq(4)').prop("selected", false);
+                        if(parseInt(element.find('.selectBarang').val().split(",")[2]) > 0){
+                            element.find('.harga_jual option:eq(1)').prop("selected", true);
+                            element.find('.harga_jual option:eq(2)').prop("selected", false);
+                            element.find('.harga_jual option:eq(3)').prop("selected", false);
+                            element.find('.harga_jual option:eq(4)').prop("selected", false);
+                        } else {
+                            element.find('.harga_jual option:eq(0)').prop("selected", true);
+                            element.find('.harga_jual option:eq(1)').prop("selected", false);
+                            element.find('.harga_jual option:eq(2)').prop("selected", false);
+                            element.find('.harga_jual option:eq(3)').prop("selected", false);
+                            element.find('.harga_jual option:eq(4)').prop("selected", false);
+
+                        }
                     } else if($(this).val() >= parseInt(element.find('.selectBarang').val().split(",")[8]) && $(this).val() < parseInt(element.find('.selectBarang').val().split(",")[9]) ){
                         // melebihi batas volume 3
-                        element.find('.harga_jual option:eq(1)').prop("selected", false);
-                        element.find('.harga_jual option:eq(2)').prop("selected", true);
-                        element.find('.harga_jual option:eq(3)').prop("selected", false);
-                        element.find('.harga_jual option:eq(4)').prop("selected", false);
+                        if(parseInt(element.find('.selectBarang').val().split(",")[3]) > 0){
+                            element.find('.harga_jual option:eq(1)').prop("selected", false);
+                            element.find('.harga_jual option:eq(2)').prop("selected", true);
+                            element.find('.harga_jual option:eq(3)').prop("selected", false);
+                            element.find('.harga_jual option:eq(4)').prop("selected", false);
+                        } else {
+                            if(parseInt(element.find('.selectBarang').val().split(",")[2]) > 0){
+                                element.find('.harga_jual option:eq(1)').prop("selected", true);
+                                element.find('.harga_jual option:eq(2)').prop("selected", false);
+                                element.find('.harga_jual option:eq(3)').prop("selected", false);
+                                element.find('.harga_jual option:eq(4)').prop("selected", false);
+                            } else {
+                                element.find('.harga_jual option:eq(0)').prop("selected", true);
+                                element.find('.harga_jual option:eq(1)').prop("selected", false);
+                                element.find('.harga_jual option:eq(2)').prop("selected", false);
+                                element.find('.harga_jual option:eq(3)').prop("selected", false);
+                                element.find('.harga_jual option:eq(4)').prop("selected", false);
+
+                            }
+                        }
                     } else if($(this).val() >= parseInt(element.find('.selectBarang').val().split(",")[9]) && $(this).val() < parseInt(element.find('.selectBarang').val().split(",")[10])){
                         // mebelihi batas volume 4
-                        element.find('.harga_jual option:eq(1)').prop("selected", false);
-                        element.find('.harga_jual option:eq(2)').prop("selected", false);
-                        element.find('.harga_jual option:eq(3)').prop("selected", true);
-                        element.find('.harga_jual option:eq(4)').prop("selected", false);
+                            if(parseInt(element.find('.selectBarang').val().split(",")[4]) > 0){
+                                element.find('.harga_jual option:eq(1)').prop("selected", false);
+                                element.find('.harga_jual option:eq(2)').prop("selected", false);
+                                element.find('.harga_jual option:eq(3)').prop("selected", true);
+                                element.find('.harga_jual option:eq(4)').prop("selected", false);
+                            } else{
+                                if(parseInt(element.find('.selectBarang').val().split(",")[3]) > 0){
+                                    element.find('.harga_jual option:eq(1)').prop("selected", false);
+                                    element.find('.harga_jual option:eq(2)').prop("selected", true);
+                                    element.find('.harga_jual option:eq(3)').prop("selected", false);
+                                    element.find('.harga_jual option:eq(4)').prop("selected", false);
+                                } else {
+                                    if(parseInt(element.find('.selectBarang').val().split(",")[2]) > 0){
+                                        element.find('.harga_jual option:eq(1)').prop("selected", true);
+                                        element.find('.harga_jual option:eq(2)').prop("selected", false);
+                                        element.find('.harga_jual option:eq(3)').prop("selected", false);
+                                        element.find('.harga_jual option:eq(4)').prop("selected", false);
+                                    } else {
+                                        element.find('.harga_jual option:eq(0)').prop("selected", true);
+                                        element.find('.harga_jual option:eq(1)').prop("selected", false);
+                                        element.find('.harga_jual option:eq(2)').prop("selected", false);
+                                        element.find('.harga_jual option:eq(3)').prop("selected", false);
+                                        element.find('.harga_jual option:eq(4)').prop("selected", false);
+
+                                    }
+                                }
+                            }
                     } else if($(this).val() >= parseInt(element.find('.selectBarang').val().split(",")[10])){
                         // melebihi batas volume 5
-                        element.find('.harga_jual option:eq(1)').prop("selected", false);
-                        element.find('.harga_jual option:eq(2)').prop("selected", false);
-                        element.find('.harga_jual option:eq(3)').prop("selected", false);
-                        element.find('.harga_jual option:eq(4)').prop("selected", true);
+                        if(parseInt(element.find('.selectBarang').val().split(",")[5]) > 0){
+                            element.find('.harga_jual option:eq(1)').prop("selected", false);
+                            element.find('.harga_jual option:eq(2)').prop("selected", false);
+                            element.find('.harga_jual option:eq(3)').prop("selected", false);
+                            element.find('.harga_jual option:eq(4)').prop("selected", true);
+                        } else {
+                            if(parseInt(element.find('.selectBarang').val().split(",")[4]) > 0){
+                                element.find('.harga_jual option:eq(1)').prop("selected", false);
+                                element.find('.harga_jual option:eq(2)').prop("selected", false);
+                                element.find('.harga_jual option:eq(3)').prop("selected", true);
+                                element.find('.harga_jual option:eq(4)').prop("selected", false);
+                            } else{
+                                if(parseInt(element.find('.selectBarang').val().split(",")[3]) > 0){
+                                    element.find('.harga_jual option:eq(1)').prop("selected", false);
+                                    element.find('.harga_jual option:eq(2)').prop("selected", true);
+                                    element.find('.harga_jual option:eq(3)').prop("selected", false);
+                                    element.find('.harga_jual option:eq(4)').prop("selected", false);
+                                } else {
+                                    if(parseInt(element.find('.selectBarang').val().split(",")[2]) > 0){
+                                        element.find('.harga_jual option:eq(1)').prop("selected", true);
+                                        element.find('.harga_jual option:eq(2)').prop("selected", false);
+                                        element.find('.harga_jual option:eq(3)').prop("selected", false);
+                                        element.find('.harga_jual option:eq(4)').prop("selected", false);
+                                    } else {
+                                        element.find('.harga_jual option:eq(0)').prop("selected", true);
+                                        element.find('.harga_jual option:eq(1)').prop("selected", false);
+                                        element.find('.harga_jual option:eq(2)').prop("selected", false);
+                                        element.find('.harga_jual option:eq(3)').prop("selected", false);
+                                        element.find('.harga_jual option:eq(4)').prop("selected", false);
+
+                                    }
+                                }
+                            }
+                        }
                     } else {
                         // kembali ke awal
                         element.find('.harga_jual option:eq(0)').prop("selected", true);
@@ -449,7 +616,7 @@
                         element.find('.harga_jual option:eq(3)').prop("selected", false);
                         element.find('.harga_jual option:eq(4)').prop("selected", false);
                     }
-                    
+
                     let total = 0;
                     setTimeout(() => {
                         $('.jumlah').each(function(){

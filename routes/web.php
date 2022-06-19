@@ -125,6 +125,8 @@ Route::group(['middleware' => ['auth', 'ceklevel:kasir']], function () {
         Route::get('/cetak_data_penjualan/{tgl}', [Kasir::class, 'cetakDataPenjualan']);
         Route::get('/cetak_faktur', [Kasir::class, 'cetakFaktur']);
         Route::get('/cetak_faktur/{tgl}/{segment}', [Kasir::class, 'cetakFaktur']);
+
+        Route::post('/get_segment_penjualan_terakhir_hari_ini', [Kasir::class, 'getSegmentPenjualanTerakhirHariIni']);
     });
 });
 

@@ -22,6 +22,13 @@ class Kasir extends Controller
         return view('pages.penjualan.index', $data);
     }
 
+    public function getSegmentPenjualanTerakhirHariIni()
+    {
+        $segmentPenjualanPerHari = Penjualan::select('segment', 'tgl_penjualan')->latest()->first();
+        $segment = $segmentPenjualanPerHari == null ? 0 : $segmentPenjualanPerHari->segment;
+        return json_encode(Penjualan::where('tgl_penjualan', Date('Y-m-d'))->where('segment', $segment)->where('id_kasir', auth()->user()->id)->get()->load('barang'));
+    }
+
     public function retur()
     {
         $segmentPenjualanPerHari = Retur::select('segment', 'tgl_retur')->latest()->first();
