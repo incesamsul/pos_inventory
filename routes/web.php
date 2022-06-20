@@ -102,7 +102,7 @@ Route::group(['middleware' => ['auth', 'ceklevel:Administrator']], function () {
     });
 });
 // ADMIN ROUTE
-Route::group(['middleware' => ['auth', 'ceklevel:kasir']], function () {
+Route::group(['middleware' => ['auth', 'ceklevel:kasir,pimpinan']], function () {
     Route::group(['prefix' => 'kasir'], function () {
         // GET REQUEST
 
