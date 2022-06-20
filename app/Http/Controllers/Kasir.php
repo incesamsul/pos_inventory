@@ -6,6 +6,8 @@ use App\Models\Barang;
 use App\Models\Penjualan;
 use App\Models\Retur;
 use App\Models\User;
+use DateTime;
+use DateTimeZone;
 use Illuminate\Http\Request;
 use Illuminate\Filesystem\Filesystem;
 use Dompdf\Dompdf;
@@ -16,24 +18,44 @@ class Kasir extends Controller
 
     public function penjualan()
     {
+        $timezone = 'Asia/Makassar';
+        $date = new DateTime('now', new DateTimeZone($timezone));
+        $tglPenjualan = $date->format('Y-m-d');
+        $jamPenjualan = $date->format('H:i:s');
+        $data['tgl_penjualan'] = $tglPenjualan;
+        $data['jam_penjualan'] = $jamPenjualan;
         $segmentPenjualanPerHari = Penjualan::select('segment', 'tgl_penjualan')->latest()->first();
         $segment = $segmentPenjualanPerHari == null ? 0 : $segmentPenjualanPerHari->segment;
-        $data['segment_penjualan_terakhir_hari_ini'] = Penjualan::where('tgl_penjualan', Date('Y-m-d'))->where('segment', $segment)->where('id_kasir', auth()->user()->id)->get();
+        $data['segment_penjualan_terakhir_hari_ini'] = Penjualan::where('tgl_penjualan', $tglPenjualan)->where('segment', $segment)->where('id_kasir', auth()->user()->id)->get();
         return view('pages.penjualan.index', $data);
     }
 
     public function getSegmentPenjualanTerakhirHariIni()
     {
+        $timezone = 'Asia/Makassar';
+        $date = new DateTime('now', new DateTimeZone($timezone));
+        $tglPenjualan = $date->format('Y-m-d');
+        $jamPenjualan = $date->format('H:i:s');
+        $data['tgl_penjualan'] = $tglPenjualan;
+        $data['jam_penjualan'] = $jamPenjualan;
+
         $segmentPenjualanPerHari = Penjualan::select('segment', 'tgl_penjualan')->latest()->first();
         $segment = $segmentPenjualanPerHari == null ? 0 : $segmentPenjualanPerHari->segment;
-        return json_encode(Penjualan::where('tgl_penjualan', Date('Y-m-d'))->where('segment', $segment)->where('id_kasir', auth()->user()->id)->get()->load('barang'));
+        return json_encode(Penjualan::where('tgl_penjualan', $tglPenjualan)->where('segment', $segment)->where('id_kasir', auth()->user()->id)->get()->load('barang'));
     }
 
     public function retur()
     {
+        $timezone = 'Asia/Makassar';
+        $date = new DateTime('now', new DateTimeZone($timezone));
+        $tglPenjualan = $date->format('Y-m-d');
+        $jamPenjualan = $date->format('H:i:s');
+        $data['tgl_penjualan'] = $tglPenjualan;
+        $data['jam_penjualan'] = $jamPenjualan;
+
         $segmentPenjualanPerHari = Retur::select('segment', 'tgl_retur')->latest()->first();
         $segment = $segmentPenjualanPerHari == null ? 0 : $segmentPenjualanPerHari->segment;
-        $data['segment_retur_terakhir_hari_ini'] = Retur::where('tgl_retur', Date('Y-m-d'))->where('segment', $segment)->where('id_kasir', auth()->user()->id)->get();
+        $data['segment_retur_terakhir_hari_ini'] = Retur::where('tgl_retur', $tglPenjualan)->where('segment', $segment)->where('id_kasir', auth()->user()->id)->get();
         return view('pages.retur.index', $data);
     }
 
@@ -232,6 +254,10 @@ class Kasir extends Controller
 
     public function savePenjualanBarang(Request $request)
     {
+        $timezone = 'Asia/Makassar';
+        $date = new DateTime('now', new DateTimeZone($timezone));
+        $tglPenjualan = $date->format('Y-m-d');
+        $jamPenjualan = $date->format('H:i:s');
         $segmentPenjualanPerHari = Penjualan::select('segment', 'tgl_penjualan')->latest()->first();
         $segment = 0;
         if (!$segmentPenjualanPerHari || $segmentPenjualanPerHari->tgl_penjualan != date('Y-m-d')) {
@@ -266,7 +292,8 @@ class Kasir extends Controller
                 Penjualan::create([
                     'id_kasir' => auth()->user()->id,
                     'kode_barang' => $kodeBarang,
-                    'tgl_penjualan' => now(),
+                    'tgl_penjualan' => $tglPenjualan,
+                    'jam_penjualan' => $jamPenjualan,
                     'qty' => $qty,
                     'harga_jual' => $hargaJual,
                     'rpdisc' => $rpdisc,
@@ -294,6 +321,10 @@ class Kasir extends Controller
 
     public function saveReturBarang(Request $request)
     {
+        $timezone = 'Asia/Makassar';
+        $date = new DateTime('now', new DateTimeZone($timezone));
+        $tglRetur = $date->format('Y-m-d');
+        $jamRetur = $date->format('H:i:s');
         $segmentReturPerHari = Retur::select('segment', 'tgl_retur')->latest()->first();
         $segment = 0;
         if (!$segmentReturPerHari || $segmentReturPerHari->tgl_retur != date('Y-m-d')) {
@@ -328,7 +359,8 @@ class Kasir extends Controller
                 Retur::create([
                     'id_kasir' => auth()->user()->id,
                     'kode_barang' => $kodeBarang,
-                    'tgl_retur' => now(),
+                    'tgl_retur' => $tglRetur,
+                    'jam_retur' => $jamRetur,
                     'qty' => $qty,
                     'harga_jual' => $hargaJual,
                     'rpdisc' => $rpdisc,

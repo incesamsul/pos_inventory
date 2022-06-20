@@ -21,6 +21,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Nama / Kode barang</th>
+                                <th>Jam penjualan</th>
                                 <th>Qty</th>
                                 <th>Harga barang</th>
                                 <th>Jumlah</th>
@@ -34,14 +35,15 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $row->barang->nama_barang }}</td>
+                                    <td>{{ $row->jam_penjualan }}</td>
                                     <td>{{ $row->qty }}</td>
-                                    <td>{{ "Rp. ".  number_format($row->barang->harga_jual_1) }}</td>
+                                    <td>{{ "Rp. ".  number_format($row->harga_jual) }}</td>
                                     <td>{{ "Rp. " . number_format($row->jumlah) }}</td>
                                     <?php $totalPenjualan += $row->jumlah ?>
                                 </tr>
                             @endforeach
                                 <tr>
-                                    <th class="text-center" colspan="4">TOTAL</th>
+                                    <th class="text-center" colspan="5">TOTAL</th>
                                     <th>{{ 'Rp. '. number_format($totalPenjualan) }}</th>
                                 </tr>
                         </tbody>
@@ -63,6 +65,7 @@
                                 <th>#</th>
                                 <th>Nama / Kode barang</th>
                                 <th>Qty</th>
+                                <th>Jam retur</th>
                                 <th>Harga barang</th>
                                 <th>Jumlah</th>
                             </tr>
@@ -76,13 +79,14 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $row->barang->nama_barang }}</td>
                                     <td>{{ $row->qty }}</td>
+                                    <td>{{ $row->jam_retur }}</td>
                                     <td>{{ "Rp. ".  number_format($row->barang->harga_jual_1) }}</td>
                                     <td>{{ "Rp. " . number_format($row->jumlah) }}</td>
                                     <?php $totalRetur += $row->jumlah ?>
                                 </tr>
                             @endforeach
                                 <tr>
-                                    <th class="text-center" colspan="4">TOTAL</th>
+                                    <th class="text-center" colspan="5">TOTAL</th>
                                     <th>{{ 'Rp. '. number_format($totalRetur) }}</th>
                                 </tr>
                         </tbody>

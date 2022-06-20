@@ -136,7 +136,7 @@
                     <span class="text-center">TOKO SMART</span><br>
                     <span class="text-center">JL. TERMINAL BARU - MAPPASAILE</span><br>
                     <span class="text-center">PANGKAJENE - PANGKEP</span><br>
-                    <span class="text-center">{{ date('d/m/Y H:s') }}</span><br>
+                    <span class="text-center">{{ $tgl_penjualan . " / " . $jam_penjualan }}</span><br>
                 </td>
             </tr>
             <tr>
@@ -242,7 +242,7 @@
             if($(this).val() >= parseInt($('.total').text().split(" : ")[1].split(",").join(""))){
                 $('.btn-simpan').prop('disabled',false);
             } else {
-                $('.btn-simpan').prop('disabled',true);
+                // $('.btn-simpan').prop('disabled',true);
             }
         })
 
@@ -251,7 +251,7 @@
         $('.add-record').hide();
         $('#tbl_posts').hide();
         $('.btn-simpan').hide();
-        $('.btn-simpan').prop('disabled',true);
+        // $('.btn-simpan').prop('disabled',true);
 
         $('#formPenyesuaian').on('submit',function(e){
             e.preventDefault();

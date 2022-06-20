@@ -19,6 +19,7 @@
                                 {{-- <th>#</th> --}}
                                 <th>Segment</th>
                                 <th>tgl penjualan</th>
+                                <th>Jam penjualan</th>
                                 <th>total</th>
                                 <th>Action</th>
                             </tr>
@@ -29,6 +30,7 @@
                                     {{-- <td>{{ $loop->iteration }}</td> --}}
                                     <td>{{ $row->segment }}</td>
                                     <td>{{ $row->tgl_penjualan }}</td>
+                                    <td>{{ $row->jam_penjualan }}</td>
                                     <td> Rp. {{ number_format($row->total) }}</td>
                                     <td>
                                         <a class="btn btn-primary" href="{{ URL::to('/kasir/data_kasir/detail/' . $row->tgl_penjualan. '/' . $row->segment) }}">Lihat detail</a>

@@ -137,7 +137,7 @@
                     <span class="text-center">TOKO SMART</span><br>
                     <span class="text-center">JL. TERMINAL BARU - MAPPASAILE</span><br>
                     <span class="text-center">PANGKAJENE - PANGKEP</span><br>
-                    <span class="text-center">{{ date('d/m/Y H:s') }}</span><br>
+                    <span class="text-center">{{ $tgl_penjualan . " / " . $jam_penjualan }}</span><br>
                 </td>
             </tr>
             <tr>
