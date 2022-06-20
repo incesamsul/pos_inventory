@@ -313,7 +313,7 @@
                                 tablePrint += '<span class="text-center">TOKO SMART</span><br>';
                                 tablePrint += '<span class="text-center">JL. TERMINAL BARU - MAPPASAILE</span><br>';
                                 tablePrint += '<span class="text-center">PANGKAJENE - PANGKEP</span><br>';
-                                tablePrint += '<span class="text-center">{{ date('d/m/Y H:s') }}</span><br>';
+                                tablePrint += '<span class="text-center">{{ $tgl_penjualan . " / " . $jam_penjualan }}</span><br>';
                                 tablePrint += '</td>';
                                 tablePrint += '</tr>';
                                 tablePrint += '<tr>';
