@@ -8,7 +8,7 @@
     {{-- csrf token --}}
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
-    <title>based</title>
+    <title>Toko smart </title>
 
     <!-- General CSS Files -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
