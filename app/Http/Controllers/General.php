@@ -26,14 +26,21 @@ class General extends Controller
     {
 
         // DATA GRAFIK
-        $data['hariIni'] = date('Y-m-d');
-        $data['hariYangLalu1'] = date("Y-m-d", strtotime('-1 days'));
-        $data['hariYangLalu2'] = date("Y-m-d", strtotime('-2 days'));
-        $data['hariYangLalu3'] = date("Y-m-d", strtotime('-3 days'));
-        $data['hariYangLalu4'] = date("Y-m-d", strtotime('-4 days'));
-        $data['hariYangLalu5'] = date("Y-m-d", strtotime('-5 days'));
-        $data['hariYangLalu6'] = date("Y-m-d", strtotime('-6 days'));
-        $data['hariYangLalu7'] = date("Y-m-d", strtotime('-7 days'));
+        $timezone = 'Asia/Makassar';
+        $date = new DateTime('now', new DateTimeZone($timezone));
+        $data['tgl_sekarang'] = $date->format('Y-m-d');
+        $data['jam_sekarang'] = $date->format('H:i:s');
+        $data['jumlah_barang'] = Barang::all()->count();
+
+        $data['hariIni'] = $date->format('Y-m-d');
+        $data['hariYangLalu1'] = $date->modify('-1 day')->format('Y-m-d');
+        $data['hariYangLalu2'] = $date->modify('-1 day')->format('Y-m-d');
+        $data['hariYangLalu3'] = $date->modify('-1 day')->format('Y-m-d');
+        $data['hariYangLalu4'] = $date->modify('-1 day')->format('Y-m-d');
+        $data['hariYangLalu5'] = $date->modify('-1 day')->format('Y-m-d');
+        $data['hariYangLalu6'] = $date->modify('-1 day')->format('Y-m-d');
+        $data['hariYangLalu7'] = $date->modify('-1 day')->format('Y-m-d');
+
         $data['penjualanHariIni'] = Penjualan::where('tgl_penjualan', $data['hariIni'])->get()->sum('jumlah') - Retur::where('tgl_retur', $data['hariIni'])->get()->sum('jumlah');
         $data['penjualan1HariYangLalu'] = Penjualan::where('tgl_penjualan', $data['hariYangLalu1'])->get()->sum('jumlah') - Retur::where('tgl_retur', $data['hariYangLalu1'])->get()->sum('jumlah');
         $data['penjualan2HariYangLalu'] = Penjualan::where('tgl_penjualan', $data['hariYangLalu2'])->get()->sum('jumlah') - Retur::where('tgl_retur', $data['hariYangLalu2'])->get()->sum('jumlah');
@@ -44,11 +51,7 @@ class General extends Controller
         $data['penjualan7HariYangLalu'] = Penjualan::where('tgl_penjualan', $data['hariYangLalu7'])->get()->sum('jumlah') - Retur::where('tgl_retur', $data['hariYangLalu7'])->get()->sum('jumlah');
         $data['totalPenjualanKeseluruhan'] = Penjualan::all()->sum('jumlah') - Retur::all()->sum('jumlah');
 
-        $timezone = 'Asia/Makassar';
-        $date = new DateTime('now', new DateTimeZone($timezone));
-        $data['tgl_sekarang'] = $date->format('Y-m-d');
-        $data['jam_sekarang'] = $date->format('H:i:s');
-        $data['jumlah_barang'] = Barang::all()->count();
+
         return view('pages.dashboard.index', $data);
     }
 
