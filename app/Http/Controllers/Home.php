@@ -10,6 +10,6 @@ class Home extends Controller
 
     public function home()
     {
-        return 'nothing';
+        return view('home.halaman_depan');
     }
 }
