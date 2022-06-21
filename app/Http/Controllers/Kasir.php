@@ -61,8 +61,12 @@ class Kasir extends Controller
 
     public function dataKasir($tgl = null)
     {
+        $timezone = 'Asia/Makassar';
+        $date = new DateTime('now', new DateTimeZone($timezone));
+        $tglPenjualan = $date->format('Y-m-d');
+        $jamPenjualan = $date->format('H:i:s');
         if (!$tgl) {
-            $tgl = Date('Y-m-d');
+            $tgl = $tglPenjualan;
         }
         $data['tgl'] = $tgl;
         $data['data_kasir'] = DB::table('penjualan')->selectRaw('*, sum(jumlah) as total')->where('tgl_penjualan', $tgl)->groupBy('segment')->get();
@@ -87,8 +91,11 @@ class Kasir extends Controller
 
     public function dataPenjualan($tgl = null)
     {
+        $timezone = 'Asia/Makassar';
+        $date = new DateTime('now', new DateTimeZone($timezone));
+        $tglPenjualan = $date->format('Y-m-d');
         if (!$tgl) {
-            $tgl = Date('Y-m-d');
+            $tgl = $tglPenjualan;
         }
         $data['tgl'] = $tgl;
         $data['data_penjualan'] = Penjualan::where('tgl_penjualan', $tgl)->get();
