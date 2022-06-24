@@ -86,6 +86,9 @@ class Kasir extends Controller
         $data['tgl'] = $tgl;
         $data['segment'] = $segment;
         $data['edit_data_kasir'] = Penjualan::where('tgl_penjualan', $tgl)->where('segment', $segment)->get();
+
+        $data['jam_penjualan'] = Penjualan::select('jam_penjualan')->where('tgl_penjualan', $tgl)->where('segment', $segment)->first()->jam_penjualan;
+
         return view('pages.edit_data_kasir.index', $data);
     }
 
@@ -230,6 +233,7 @@ class Kasir extends Controller
                     'id_kasir' => auth()->user()->id,
                     'kode_barang' => $kodeBarang,
                     'tgl_penjualan' => $request->tgl,
+                    'jam_penjualan' => $request->jam_penjualan,
                     'qty' => $qty,
                     'harga_jual' => $hargaJual,
                     'rpdisc' => $rpdisc,

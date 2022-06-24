@@ -48,6 +48,7 @@
                     <table class="table table-bordered " id="tbl_posts">
                         <thead>
                             <input type="hidden" name="tgl" value="{{ $tgl }}">
+                            <input type="hidden" name="jam_penjualan" value="{{ $jam_penjualan }}">
                             <input type="hidden" name="segment" value="{{ $segment }}">
                           <tr>
                             <th>#</th>
