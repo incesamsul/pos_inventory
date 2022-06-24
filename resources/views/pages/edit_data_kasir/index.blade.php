@@ -64,7 +64,7 @@
                         </thead>
                         <tbody id="tbl_posts_body">
                             @foreach ($edit_data_kasir as $row)
-                            <?php $total+=($row->harga_jual * $row->qty) ?>
+                            <?php $total+=($row->harga_jual * $row->qty - $row->rpdisc) ?>
                                 <tr id="rec-{{ $loop->iteration }}">
                                     <td>{{ $loop->iteration }}</td>
                                     <td class="td_barcode" style="padding-left: 9px;padding-right:9px;">
