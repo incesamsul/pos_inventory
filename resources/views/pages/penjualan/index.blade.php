@@ -332,7 +332,7 @@
                                     tablePrint += '<td class="text-left">' + addCommas(data[i].harga_jual) + '</td>';
                                     tablePrint += '<td class="text-left"> = ' + addCommas(data[i].jumlah) + '</td>';
                                     tablePrint += '</tr>';
-                                    total += data[i].jumlah;
+                                    total += parseInt(data[i].jumlah);
                                 }
 
                                 tablePrint += '<tr>';
