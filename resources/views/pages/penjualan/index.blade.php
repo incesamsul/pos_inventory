@@ -339,13 +339,13 @@
                                 tablePrint += '<td colspan="3" style="text-align:center;">========================</td>';
                                 tablePrint += '</tr>';
                                 tablePrint += '<tr>';
-                                tablePrint += "<td colspan = '2'><div style='text-align:left; color:black'>Total : </div></td><td style='text-align:left; font-size:90px; color:black'>  " + addCommas(total) + "</td>";
+                                tablePrint += "<td colspan = '2'><div style='text-align:left; color:black'>Total : </div></td><td style='text-align:left; font-size:90px; color:black'>  " + addCommas(parseInt(total)) + "</td>";
                                 tablePrint += '</tr>';
                                 tablePrint += '<tr>';
                                 tablePrint += "<td colspan = '2'><div style='text-align:left; color:black'>Bayar : </div></td><td style='text-align:left; font-size:90px; color:black'>  " + addCommas(data[0].bayar) + "</td>";
                                 tablePrint += '</tr>';
                                 tablePrint += '<tr>';
-                                tablePrint += "<td colspan = '2'><div style='text-align:left; color:black'>Kembalian : </div></td><td style='text-align:left; font-size:90px; color:black'>  " +  addCommas(data[0].bayar - total) +  "</td>";
+                                tablePrint += "<td colspan = '2'><div style='text-align:left; color:black'>Kembalian : </div></td><td style='text-align:left; font-size:90px; color:black'>  " +  addCommas(data[0].bayar - parseInt(total)) +  "</td>";
                                 tablePrint += '</tr>';
                                 tablePrint += '<tr>';
                                 tablePrint += '<td colspan="3" style="text-align:center;">Terima kasih atas kunjugannya</td>';
