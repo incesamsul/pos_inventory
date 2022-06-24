@@ -376,7 +376,7 @@ class Kasir extends Controller
                     'harga_jual' => $hargaJual,
                     'rpdisc' => $rpdisc,
                     'bayar' => $request->pembayaran == null ? 0 : $request->pembayaran,
-                    'jumlah' => $hargaJual * $qty,
+                    'jumlah' => $hargaJual * $qty - $rpdisc,
                     'segment' => $segment
                 ]);
 
