@@ -435,7 +435,7 @@
                 option += '<option value="">-- pilih barang --</option>';
                 for (i in data) {
                     let satuan = data[i].satuan !== null ? data[i].satuan.nama_satuan : data[i].kode_satuan;
-                    option += '<option value="' + data[i].kode_barang + "," + data[i].harga_jual_1 + "," + data[i].harga_jual_2 + "," + data[i].harga_jual_3 + "," + data[i].harga_jual_4 + "," + data[i].harga_jual_5 + "," + satuan  + "," + data[i].batas_volume_harga_jual_2  +"," + data[i].batas_volume_harga_jual_3  + "," + data[i].batas_volume_harga_jual_4  + "," + data[i].batas_volume_harga_jual_5  +'">' + data[i].nama_barang + " " + data[i].barcode +'</option>';
+                    option += '<option value="' + data[i].kode_barang + "," + data[i].harga_jual_1 + "," + data[i].harga_jual_2 + "," + data[i].harga_jual_3 + "," + data[i].harga_jual_4 + "," + data[i].harga_jual_5 + "," + satuan  + "," + data[i].batas_volume_harga_jual_2  +"," + data[i].batas_volume_harga_jual_3  + "," + data[i].batas_volume_harga_jual_4  + "," + data[i].batas_volume_harga_jual_5  +'">' + data[i].nama_barang + " " + data[i].barcode + " | Batas Vol 2 : (" + data[i].batas_volume_harga_jual_2 + ") | Batas Vol 3 : (" + data[i].batas_volume_harga_jual_3 +  ") | Batas Vol 4 : (" + data[i].batas_volume_harga_jual_4 + ')</option>';
                 }
                 element.find('.selectBarang').select2({
                     width: 'element'

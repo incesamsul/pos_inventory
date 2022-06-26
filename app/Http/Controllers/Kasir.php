@@ -271,7 +271,7 @@ class Kasir extends Controller
         $jamPenjualan = $date->format('H:i:s');
         $segmentPenjualanPerHari = Penjualan::select('segment', 'tgl_penjualan')->latest()->first();
         $segment = 0;
-        if (!$segmentPenjualanPerHari || $segmentPenjualanPerHari->tgl_penjualan != date('Y-m-d')) {
+        if (!$segmentPenjualanPerHari || $segmentPenjualanPerHari->tgl_penjualan != $tglPenjualan) {
             $segment = 1;
         } else {
             $segment = $segmentPenjualanPerHari->segment + 1;
@@ -338,7 +338,7 @@ class Kasir extends Controller
         $jamRetur = $date->format('H:i:s');
         $segmentReturPerHari = Retur::select('segment', 'tgl_retur')->latest()->first();
         $segment = 0;
-        if (!$segmentReturPerHari || $segmentReturPerHari->tgl_retur != date('Y-m-d')) {
+        if (!$segmentReturPerHari || $segmentReturPerHari->tgl_retur != $tglRetur) {
             $segment = 1;
         } else {
             $segment = $segmentReturPerHari->segment + 1;
