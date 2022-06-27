@@ -300,4 +300,17 @@ class Admin extends Controller
         User::destroy($request->post('user_id'));
         return 1;
     }
+
+
+    public function select2CariBarang(Request $request){
+        $data = [];
+
+        if($request->has('q')){
+            $search = $request->q;
+            $data = Barang::where('nama_barang','LIKE',"%$search%")
+            		->limit(10)->get()->load('satuan');
+        }
+        return response()->json($data);
+    }
+
 }

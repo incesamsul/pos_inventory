@@ -115,6 +115,7 @@ Route::group(['middleware' => ['auth', 'ceklevel:kasir,pimpinan']], function () 
         Route::get('/data_penjualan', [Kasir::class, 'dataPenjualan']);
         Route::get('/data_penjualan/{tgl}', [Kasir::class, 'dataPenjualan']);
         Route::post('/get_all_barang', [Admin::class, 'getAllBarang']);
+        Route::get('/select2_cari_barang', [Admin::class, 'select2CariBarang']);
 
         Route::post('/save_penjualan_barang', [Kasir::class, 'savePenjualanBarang']);
         Route::post('/update_penjualan_barang', [Kasir::class, 'updatePenjualanBarang']);
