@@ -119,9 +119,24 @@
     </div>
 </section>
 
+<style>
+    @font-face {
+        font-family: 'FakeReceipt';
+        font-style: normal;
+        font-weight: normal;
+        /* src: local('FakeReceipt-Regular'), url('fakereceipt.woff') format('woff'); */
+        src: url('/font/fakereceipt.woff');
+    }
+
+    table#myprint tbdody#tbody-printSection{
+        font-family: 'FakeReceipt' !important;
+    }
+
+</style>
+
 <div id="printSection">
     {{-- <table class="table table-bordered"> --}}
-        <table cellspacing='0' cellpadding='0' style="width:100%; color:black; font-size:85px !important; font-family:'Bahnschrift SemiBold SemiConden';  border-collapse: collapse;" border='0'>
+        <table id="myprint" class="print" cellspacing='0' cellpadding='0' style="width:100%; color:black; font-size:85px !important; font-family:'FakeReceipt';  border-collapse: collapse;" border='0'>
         {{-- <thead>
             <tr>
                 <th>#</th>
